@@ -21,7 +21,7 @@ export const useSwaggerOptions = () => {
         },
       ],
     },
-    apis: ['./src/controllers/*.ts', './src/db/models/*.ts', './src/models/*.ts'],
+    apis: ['./src/**/*.yml'],
   };
   return swaggerOptions;
 };

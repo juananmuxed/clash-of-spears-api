@@ -1,0 +1,20 @@
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          example: An error has ocurred
+        status:
+          type: string
+          example: 'fail'
+    InternalError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Internal server error
+        status:
+          type: string
+          example: 'error'
