@@ -1,5 +1,7 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { Expansions } from "../db/models/Expansions";
+import { InternalError, NotFoundError } from "../models/Errors";
+import { ERRORS } from "../config/data/Errors";
 
 export class ExpansionController {
 
@@ -91,18 +93,15 @@ export class ExpansionController {
    *              schema:
    *                $ref: '#/components/schemas/Error'
    */
-  async createExpansion(req: Request, res: Response) {
+  async createExpansion(req: Request, res: Response, next: NextFunction) {
     const { body } = req;
     
     try {
       const newExpansion = await Expansions.create(body);
         
-      res.json(newExpansion)
+      res.status(201).json(newExpansion)
     } catch (error) {
-      res.status(500).json({
-        message: `Error creating in DB, contact admin`,
-        error: error,
-      })
+      next(new InternalError())
     }
   }
        
@@ -130,24 +129,19 @@ export class ExpansionController {
    *              schema:
    *                $ref: '#/components/schemas/Error'
    */ 
-  async updateExpansion(req: Request, res: Response) {
+  async updateExpansion(req: Request, res: Response, next: NextFunction) {
     const { body } = req;
     
     try {
-      if(!body.id) return res.status(404).json({ message: `Not ID provided to update`})
-
       const expansion = await Expansions.findByPk(body.id);
 
-      if(!expansion) return res.status(404).json({ message: `Not found item with this ID`})
+      if(!expansion) next(new NotFoundError(ERRORS.NOT_FOUND('Expansion')))
       
-      const newExpansion = await expansion.update(body)
+      const newExpansion = await expansion?.update(body)
         
       res.json(newExpansion)
     } catch (error) {
-      res.status(500).json({
-        message: `Error creating in DB, contact admin`,
-        error: error,
-      })
+      next(new InternalError())
     }
   }
 
@@ -175,24 +169,19 @@ export class ExpansionController {
    *              schema:
    *                $ref: '#/components/schemas/Error'
    */ 
-  async deleteExpansion(req: Request, res: Response) {
+  async deleteExpansion(req: Request, res: Response, next: NextFunction) {
     const { body } = req;
     
     try {
-      if(!body.id) return res.status(404).json({ message: `Not ID provided to delete`})
-
       const expansion = await Expansions.findByPk(body.id);
 
-      if(!expansion) return res.status(404).json({ message: `Not found item with this ID`})
+      if(!expansion) next(new NotFoundError(ERRORS.NOT_FOUND('Expansion')))
       
-      const newExpansion = await expansion.destroy()
+      const newExpansion = await expansion?.destroy()
         
       res.json(newExpansion)
     } catch (error) {
-      res.status(500).json({
-        message: `Error creating in DB, contact admin`,
-        error: error,
-      })
+      next(new InternalError())
     }
   }
 }

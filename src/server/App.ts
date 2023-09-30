@@ -6,7 +6,8 @@ import { useLoggerServer } from '../config/UseLoggerServer';
 import { ApiPaths } from '../models/Server';
 import expansionRoutes from '../routes/Expansions'
 import { db, dbHost, dbTable } from '../db/Connection';
-import { useSwagger } from './Swagger';
+import { useSwagger } from '../middlewares/Swagger';
+import { useDefaultErrorHandler, useErrorHandler } from '../middlewares/ErrorHandler';
 
 const log = useLoggerServer();
 
@@ -16,6 +17,7 @@ export class Server {
   private host: string;
   private rootPath = '/api/';
   private apiPaths: ApiPaths = {
+    docs: this.rootPath + 'docs',
     expansions: this.rootPath + 'expansions'
   }
 
@@ -28,6 +30,7 @@ export class Server {
     this.middlewares();
     this.routes();
     this.swagger();
+    this.errorHandler();
   }
 
   async dbConnection() {
@@ -44,12 +47,17 @@ export class Server {
     this.app.use(express.json())
   }
 
-  swagger() {
-    this.app.use('/', swaggerUI.serve, swaggerUI.setup(useSwagger()));
-  }
-
   routes() {
     this.app.use(this.apiPaths.expansions, expansionRoutes);
+  }
+
+  swagger() {
+    this.app.use(this.apiPaths.docs, swaggerUI.serve, swaggerUI.setup(useSwagger()));
+  }
+  
+  errorHandler() {
+    this.app.use(useDefaultErrorHandler)
+    this.app.use(useErrorHandler)
   }
 
   listen() {
