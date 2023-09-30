@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { Expansions } from "../db/models/Expansions";
+import { ExpansionItem, Expansions } from "../db/models/Expansions";
 import { InternalError, NotFoundError } from "../models/Errors";
 import { ERRORS } from "../config/data/Errors";
+import { TypedRequest } from "../db/models/common/ExpressTypes";
 
 export class ExpansionController {
 
@@ -19,7 +20,7 @@ export class ExpansionController {
     res.json(expansions)
   }
 
-  async createExpansion(req: Request, res: Response, next: NextFunction) {
+  async createExpansion(req: TypedRequest<ExpansionItem>, res: Response, next: NextFunction) {
     const { body } = req;
     
     try {
@@ -31,7 +32,7 @@ export class ExpansionController {
     }
   }
 
-  async updateExpansion(req: Request, res: Response, next: NextFunction) {
+  async updateExpansion(req: TypedRequest<ExpansionItem>, res: Response, next: NextFunction) {
     const { body } = req;
     
     try {
@@ -47,7 +48,7 @@ export class ExpansionController {
     }
   }
  
-  async deleteExpansion(req: Request, res: Response, next: NextFunction) {
+  async deleteExpansion(req: TypedRequest<ExpansionItem>, res: Response, next: NextFunction) {
     const { body } = req;
     
     try {
