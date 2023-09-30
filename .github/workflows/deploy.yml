@@ -17,8 +17,10 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
             cd ${{ secrets.PROJECT_PATH }}
+            git checkout main
             git pull
-            npm i
-            git restore package-lock.json
-            npm run build
-            cp example.htaccess dist/.htaccess
+            docker stop cos-api-container
+            docker build . -t cos-api:latest
+            docker rm cos-api-container
+            docker run -d --restart always -p 3000:3000 --name cos-api-container --add-host host.docker.internal:host-gateway cos-api
+            yes | docker system prune -a
