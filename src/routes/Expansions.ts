@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { ExpansionController } from "../controllers/Expansions";
 import { Auth } from "../controllers/Auth";
+import { ExpansionsController } from "../controllers/Expansions";
 
 const router = Router();
 
-const expansions = new ExpansionController();
+const expansions = new ExpansionsController();
 const auth = new Auth();
 
 router.route('/')

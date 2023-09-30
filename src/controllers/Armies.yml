@@ -1,0 +1,123 @@
+paths:
+  /api/armies/:
+    get:
+        tags:
+            - Armies
+        summary: Get armies
+        description: Use to get all active armies
+        responses:
+          '200':
+            description: Success
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Armies'
+          '400':
+            description: An error has ocurred
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'
+    post:
+        tags:
+            - Armies
+        summary: Create new army
+        description: Use to create a army
+        security:
+          - bearerAuth: []
+        responses:
+          '200':
+            description: Success
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Armies'
+          '400':
+            description: An error has ocurred
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'
+          '500':
+            description: Internal error
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/InternalError'
+    put:
+        tags:
+            - Armies
+        summary: Update new army
+        description: Use to update a army
+        security:
+          - bearerAuth: []
+        responses:
+          '200':
+            description: Success
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Armies'
+          '400':
+            description: An error has ocurred
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'
+          '500':
+            description: Internal error
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/InternalError'
+    delete:
+        tags:
+            - Armies
+        summary: Delete army
+        description: Use to delete a army
+        security:
+          - bearerAuth: []
+        responses:
+          '200':
+            description: Success
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Armies'
+          '400':
+            description: An error has ocurred
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'
+          '500':
+            description: Internal error
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/InternalError'
+  /api/armies/all:
+    get:
+        tags:
+            - Armies
+        summary: Get all armies
+        description: Use to get all armies included inactive
+        security:
+          - bearerAuth: []
+        responses:
+          '200':
+            description: Success
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Armies'
+          '400':
+            description: An error has ocurred
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'

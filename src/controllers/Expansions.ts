@@ -3,12 +3,22 @@ import { ExpansionItem, Expansions } from "../db/models/Expansions";
 import { InternalError, NotFoundError } from "../models/Errors";
 import { ERRORS } from "../config/data/Errors";
 import { TypedRequest } from "../db/models/common/ExpressTypes";
+import { Armies } from "../db/models/Armies";
 
-export class ExpansionController {
+export class ExpansionsController {
 
   async getExpansions(_req: Request, res: Response) {
     const expansions = await Expansions.findAll({ 
-      where: {active: true} 
+      where: {active: true},
+      include: [
+        { 
+          model: Armies,
+          as: 'armies',
+          where: {
+            active: true
+          }
+        }
+      ]
     });
     
     res.json(expansions)

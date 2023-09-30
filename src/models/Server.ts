@@ -4,6 +4,7 @@ export type ServerUrl = {
 }
 
 export type ApiPaths = {
-  expansions: string;
   docs: string;
+  expansions: string;
+  armies: string;
 }

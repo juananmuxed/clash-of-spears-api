@@ -1,0 +1,23 @@
+components:
+  schemas:
+    Armies:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        expansionId:
+          type: number
+          example: 1
+        name:
+          type: string
+        imgUrl:
+          type: string
+        active:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time

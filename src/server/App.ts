@@ -4,10 +4,12 @@ import cors from 'cors'
 
 import { useLoggerServer } from '../config/UseLoggerServer';
 import { ApiPaths } from '../models/Server';
-import expansionRoutes from '../routes/Expansions'
 import { db, dbHost, dbTable } from '../db/Connection';
 import { useSwagger } from '../middlewares/Swagger';
 import { useDefaultErrorHandler, useErrorHandler } from '../middlewares/ErrorHandler';
+
+import expansionsRoutes from '../routes/Expansions'
+import armiesRoutes from '../routes/Armies'
 
 const log = useLoggerServer();
 
@@ -18,7 +20,8 @@ export class Server {
   private rootPath = '/api/';
   private apiPaths: ApiPaths = {
     docs: this.rootPath + 'docs',
-    expansions: this.rootPath + 'expansions'
+    expansions: this.rootPath + 'expansions',
+    armies: this.rootPath + 'armies'
   }
 
   constructor() {
@@ -48,7 +51,8 @@ export class Server {
   }
 
   routes() {
-    this.app.use(this.apiPaths.expansions, expansionRoutes);
+    this.app.use(this.apiPaths.expansions, expansionsRoutes);
+    this.app.use(this.apiPaths.armies, armiesRoutes);
   }
 
   swagger() {
