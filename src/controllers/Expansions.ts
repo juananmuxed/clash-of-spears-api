@@ -14,6 +14,7 @@ export class ExpansionsController {
         { 
           model: Armies,
           as: 'armies',
+          required: false,
           where: {
             active: true
           }
