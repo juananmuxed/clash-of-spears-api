@@ -1,6 +1,6 @@
 components:
   schemas:
-    Expansions:
+    Roles:
       type: object
       properties:
         id:
@@ -8,12 +8,6 @@ components:
           example: 1
         name:
           type: string
-        armies:
-          type: array
-          items: 
-            $ref: '#/components/schemas/Armies'
-        active:
-          type: boolean
         createdAt:
           type: string
           format: date-time

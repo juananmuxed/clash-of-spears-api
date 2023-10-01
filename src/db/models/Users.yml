@@ -1,19 +1,15 @@
 components:
   schemas:
-    Expansions:
+    Users:
       type: object
       properties:
         id:
           type: number
           example: 1
-        name:
+        username:
           type: string
-        armies:
-          type: array
-          items: 
-            $ref: '#/components/schemas/Armies'
-        active:
-          type: boolean
+        email:
+          type: string
         createdAt:
           type: string
           format: date-time

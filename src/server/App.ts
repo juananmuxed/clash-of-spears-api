@@ -11,6 +11,8 @@ import { useDefaultErrorHandler, useErrorHandler } from '../middlewares/ErrorHan
 import expansionsRoutes from '../routes/Expansions'
 import armiesRoutes from '../routes/Armies'
 import unitTypesRoutes from '../routes/UnitTypes'
+import usersRoutes from '../routes/Users'
+import rolesRoutes from '../routes/Roles'
 
 const log = useLoggerServer();
 
@@ -23,7 +25,9 @@ export class Server {
     docs: this.rootPath + 'docs',
     expansions: this.rootPath + 'expansions',
     armies: this.rootPath + 'armies',
-    unitTypes: this.rootPath + 'unit-types'
+    unitTypes: this.rootPath + 'unit-types',
+    users: this.rootPath + 'users',
+    roles: this.rootPath + 'roles',
   }
 
   constructor() {
@@ -55,11 +59,17 @@ export class Server {
   routes() {
     this.app.use(this.apiPaths.expansions, expansionsRoutes);
     this.app.use(this.apiPaths.armies, armiesRoutes);
-    this.app.use(this.apiPaths.unitTypes, unitTypesRoutes)
+    this.app.use(this.apiPaths.unitTypes, unitTypesRoutes);
+    this.app.use(this.apiPaths.users, usersRoutes);
+    this.app.use(this.apiPaths.roles, rolesRoutes);
   }
 
   swagger() {
-    this.app.use(this.apiPaths.docs, swaggerUI.serve, swaggerUI.setup(useSwagger()));
+    this.app.use(this.apiPaths.docs, swaggerUI.serve, swaggerUI.setup(useSwagger(), { 
+      swaggerOptions: { 
+        docExpansion: 'none'
+      }
+    }));
   }
   
   errorHandler() {

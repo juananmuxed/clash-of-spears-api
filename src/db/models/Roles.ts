@@ -5,25 +5,21 @@ import {
   Model,
 } from "sequelize";
 import { db } from "../Connection";
-import { Armies } from "./Armies";
+import { Users } from "./Users";
 
-export interface ExpansionItem {
+export interface RoleItem {
   id: number;
   name: string;
-  active: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
-export interface ExpansionModel
-  extends Model<
-  InferAttributes<ExpansionModel>,
-  InferCreationAttributes<ExpansionModel>
-  >,
-  ExpansionItem {}
+export interface RoleModel
+  extends Model<InferAttributes<RoleModel>, InferCreationAttributes<RoleModel>>,
+  RoleItem {}
 
-export const Expansions = db.define<ExpansionModel>(
-  "expansions",
+export const Roles = db.define<RoleModel>(
+  "roles",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -34,11 +30,8 @@ export const Expansions = db.define<ExpansionModel>(
       type: DataTypes.STRING(20),
       unique: true,
     },
-    active: {
-      type: DataTypes.BOOLEAN,
-    },
   },
   { underscored: true }
 );
 
-Expansions.hasMany(Armies, { as: "armies" });
+Roles.hasMany(Users, { as: "users" });
