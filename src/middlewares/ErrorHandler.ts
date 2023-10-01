@@ -8,6 +8,7 @@ export const useErrorHandler = (err: Error, _req: Request, res: Response, next: 
       return res.status(err.status).json({
         status: err.status < 500 && err.status >= 400 ? 'fail' :'error',
         message: err.message,
+        internalErrors: err.errors
       })
     }
 
