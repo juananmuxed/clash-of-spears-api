@@ -9,7 +9,7 @@ const auth = new Auth();
 
 router.route('/')
   .get(unitTypes.getUnitTypes)
-  .post( unitTypes.createUnitType)
+  .post(auth.authJWT, unitTypes.createUnitType)
   .put(auth.authJWT, unitTypes.updateUnitType)
   .delete(auth.authJWT, unitTypes.deleteUnitType);
 

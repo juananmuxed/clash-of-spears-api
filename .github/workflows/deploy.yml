@@ -19,8 +19,4 @@ jobs:
             cd ${{ secrets.PROJECT_PATH }}
             git checkout main
             git pull
-            docker stop cos-api-container
-            docker build . -t cos-api:latest
-            docker rm cos-api-container
-            docker run -d --restart always -p 3000:3000 --name cos-api-container --add-host host.docker.internal:host-gateway cos-api
-            yes | docker system prune -a
+            npm run docker:deploy

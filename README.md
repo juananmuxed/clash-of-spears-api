@@ -67,6 +67,12 @@ Clone .env.example or rename as .env
 
 And you can access to the swagger via web browser in http://localhost:3000/swagger
 
+## Docker production
+
+Create a `.env.production` with params of DB and run `npm run docker:deploy` 
+
+Remember you need a Database with a `name-of-table` table chosen in the `.env.production` file.
+
 ## 🏗 Built with
 
 - [Express](https://expressjs.com/)
