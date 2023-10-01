@@ -12,7 +12,7 @@ export interface ExpansionItem {
 
 export interface ExpansionModel extends Model<InferAttributes<ExpansionModel>, InferCreationAttributes<ExpansionModel>>, ExpansionItem {}
 
-export const Expansions = db.define<ExpansionModel>('Expansions', {
+export const Expansions = db.define<ExpansionModel>('expansions', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -25,7 +25,7 @@ export const Expansions = db.define<ExpansionModel>('Expansions', {
   active: {
     type: DataTypes.BOOLEAN
   }
-})
+}, {underscored: true})
 
-Armies.belongsTo(Expansions, { foreignKey: 'expansionId', as: 'expansion'})
+Armies.belongsTo(Expansions, { foreignKey: 'expansion_id', as: 'expansion'})
 Expansions.hasMany(Armies, { as: 'armies'});

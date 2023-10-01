@@ -13,7 +13,7 @@ export interface ArmyItem {
 
 export interface ArmyModel extends Model<InferAttributes<ArmyModel>, InferCreationAttributes<ArmyModel>>, ArmyItem {}
 
-export const Armies = db.define<ArmyModel>('Armies', {
+export const Armies = db.define<ArmyModel>('armies', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -29,4 +29,4 @@ export const Armies = db.define<ArmyModel>('Armies', {
   imgUrl: {
     type: DataTypes.STRING(255)
   },
-})
+}, { underscored: true})

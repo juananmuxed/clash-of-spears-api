@@ -1,0 +1,16 @@
+components:
+  schemas:
+    UnitTypes:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        name:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time

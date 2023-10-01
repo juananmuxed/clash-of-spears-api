@@ -10,6 +10,7 @@ import { useDefaultErrorHandler, useErrorHandler } from '../middlewares/ErrorHan
 
 import expansionsRoutes from '../routes/Expansions'
 import armiesRoutes from '../routes/Armies'
+import unitTypesRoutes from '../routes/UnitTypes'
 
 const log = useLoggerServer();
 
@@ -21,7 +22,8 @@ export class Server {
   private apiPaths: ApiPaths = {
     docs: this.rootPath + 'docs',
     expansions: this.rootPath + 'expansions',
-    armies: this.rootPath + 'armies'
+    armies: this.rootPath + 'armies',
+    unitTypes: this.rootPath + 'unit-types'
   }
 
   constructor() {
@@ -30,7 +32,7 @@ export class Server {
     this.host = process.env.API_HOST || 'localhost';
 
     this.dbConnection();
-    this.middlewares();
+    this.middleWares();
     this.routes();
     this.swagger();
     this.errorHandler();
@@ -45,7 +47,7 @@ export class Server {
     }
   }
 
-  middlewares() {
+  middleWares() {
     this.app.use(cors())
     this.app.use(express.json())
   }
@@ -53,6 +55,7 @@ export class Server {
   routes() {
     this.app.use(this.apiPaths.expansions, expansionsRoutes);
     this.app.use(this.apiPaths.armies, armiesRoutes);
+    this.app.use(this.apiPaths.unitTypes, unitTypesRoutes)
   }
 
   swagger() {

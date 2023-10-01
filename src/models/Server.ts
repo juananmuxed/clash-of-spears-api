@@ -7,4 +7,5 @@ export type ApiPaths = {
   docs: string;
   expansions: string;
   armies: string;
+  unitTypes: string;
 }
