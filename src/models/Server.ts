@@ -10,4 +10,5 @@ export type ApiPaths = {
   unitTypes: string;
   users: string;
   roles: string;
+  authentication: string;
 }

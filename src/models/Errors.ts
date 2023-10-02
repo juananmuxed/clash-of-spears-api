@@ -29,6 +29,13 @@ export class AuthError extends BaseError {
   }
 }
 
+export class InvalidLogin extends BaseError {
+  constructor(message?: string) {
+    super(message || ERRORS.INVALID_LOGIN, 401)
+    Object.setPrototypeOf(this, InvalidLogin.prototype)
+  }
+}
+
 export class InternalError extends BaseError {
   constructor(message?: string, errors?: ValidationError) {
     super(message || ERRORS.INTERNAL_ERROR, 500, errors)

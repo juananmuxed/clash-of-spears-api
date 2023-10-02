@@ -13,6 +13,7 @@ import armiesRoutes from '../routes/Armies'
 import unitTypesRoutes from '../routes/UnitTypes'
 import usersRoutes from '../routes/Users'
 import rolesRoutes from '../routes/Roles'
+import rolesAuthentication from '../routes/Authentication'
 
 const log = useLoggerServer();
 
@@ -28,6 +29,7 @@ export class Server {
     unitTypes: this.rootPath + 'unit-types',
     users: this.rootPath + 'users',
     roles: this.rootPath + 'roles',
+    authentication: this.rootPath + 'auth',
   }
 
   constructor() {
@@ -62,6 +64,7 @@ export class Server {
     this.app.use(this.apiPaths.unitTypes, unitTypesRoutes);
     this.app.use(this.apiPaths.users, usersRoutes);
     this.app.use(this.apiPaths.roles, rolesRoutes);
+    this.app.use(this.apiPaths.authentication, rolesAuthentication);
   }
 
   swagger() {

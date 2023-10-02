@@ -3,6 +3,7 @@ import { UserItem, Users } from "../db/models/Users";
 import { InternalError, NotFoundError } from "../models/Errors";
 import { ERRORS } from "../config/data/Errors";
 import { TypedRequest } from "../db/models/common/ExpressTypes";
+import { ValidationError } from "sequelize";
 
 export class UsersController {
 
@@ -20,7 +21,7 @@ export class UsersController {
         
       res.status(201).json(newUser)
     } catch (error) {
-      next(new InternalError())
+      next(new InternalError(undefined, error as ValidationError))
     }
   }
 
@@ -36,7 +37,7 @@ export class UsersController {
         
       res.json(newUser)
     } catch (error) {
-      next(new InternalError())
+      next(new InternalError(undefined, error as ValidationError))
     }
   }
  
@@ -52,7 +53,7 @@ export class UsersController {
         
       res.json(newUser)
     } catch (error) {
-      next(new InternalError())
+      next(new InternalError(undefined, error as ValidationError))
     }
   }
 }

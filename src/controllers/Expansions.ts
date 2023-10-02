@@ -4,6 +4,7 @@ import { InternalError, NotFoundError } from "../models/Errors";
 import { ERRORS } from "../config/data/Errors";
 import { TypedRequest } from "../db/models/common/ExpressTypes";
 import { Armies } from "../db/models/Armies";
+import { ValidationError } from "sequelize";
 
 export class ExpansionsController {
 
@@ -39,7 +40,7 @@ export class ExpansionsController {
         
       res.status(201).json(newExpansion)
     } catch (error) {
-      next(new InternalError())
+      next(new InternalError(undefined, error as ValidationError))
     }
   }
 
@@ -55,7 +56,7 @@ export class ExpansionsController {
         
       res.json(newExpansion)
     } catch (error) {
-      next(new InternalError())
+      next(new InternalError(undefined, error as ValidationError))
     }
   }
  
@@ -71,7 +72,7 @@ export class ExpansionsController {
         
       res.json(newExpansion)
     } catch (error) {
-      next(new InternalError())
+      next(new InternalError(undefined, error as ValidationError))
     }
   }
 }

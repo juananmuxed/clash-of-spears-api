@@ -3,6 +3,7 @@ import { Armies, ArmyItem } from "../db/models/Armies";
 import { TypedRequest } from "../db/models/common/ExpressTypes";
 import { InternalError, NotFoundError } from "../models/Errors";
 import { ERRORS } from "../config/data/Errors";
+import { ValidationError } from "sequelize";
 
 export class ArmiesController {
   async getArmies(_req: Request, res: Response) {
@@ -27,7 +28,7 @@ export class ArmiesController {
         
       res.status(201).json(newArmy)
     } catch (error) {
-      next(new InternalError())
+      next(new InternalError(undefined, error as ValidationError))
     }
   }
   
@@ -43,7 +44,7 @@ export class ArmiesController {
         
       res.json(newArmy)
     } catch (error) {
-      next(new InternalError())
+      next(new InternalError(undefined, error as ValidationError))
     }
   }
  
@@ -59,7 +60,7 @@ export class ArmiesController {
         
       res.json(newArmy)
     } catch (error) {
-      next(new InternalError())
+      next(new InternalError(undefined, error as ValidationError))
     }
   }
 }

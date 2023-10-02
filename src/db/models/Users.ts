@@ -5,6 +5,7 @@ import {
   Model,
 } from "sequelize";
 import { db } from "../Connection";
+import { Authentication } from "../../models/Authentication";
 
 export interface UserItem {
   id: number;
@@ -16,9 +17,9 @@ export interface UserItem {
   updatedAt?: Date;
 }
 
-export interface UserModel
-  extends Model<InferAttributes<UserModel>, InferCreationAttributes<UserModel>>,
-  UserItem {}
+const auth = new Authentication()
+
+export interface UserModel extends Model<InferAttributes<UserModel>, InferCreationAttributes<UserModel>>, UserItem {}
 
 export const Users = db.define<UserModel>(
   "users",
@@ -42,3 +43,10 @@ export const Users = db.define<UserModel>(
   },
   { underscored: true }
 );
+
+const encryptPassword = async (user: UserModel) => {
+  if(user.changed('password')) user.set('password', await auth.passwordHash(user.password))
+}
+
+Users.beforeCreate(encryptPassword)
+Users.beforeUpdate(encryptPassword)

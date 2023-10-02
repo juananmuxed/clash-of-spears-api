@@ -1,16 +1,16 @@
 import { Router } from "express";
-import { Auth } from "../controllers/Auth";
-import { UsersController } from "../controllers/Users";
+import { AuthenticationController } from "../controllers/Authentication";
+import { RolesController } from "../controllers/Roles";
 
 const router = Router();
 
-const users = new UsersController();
-const auth = new Auth();
+const roles = new RolesController();
+const auth = new AuthenticationController();
 
 router.route('/')
-  .get(auth.authJWT, users.getUsers)
-  .post(auth.authJWT, users.createUser)
-  .put(auth.authJWT, users.updateUser)
-  .delete(auth.authJWT, users.deleteUser);
+  .get([auth.authJWT, auth.checkRole(['admin'])], roles.getRoles)
+  .post([auth.authJWT, auth.checkRole(['admin'])], roles.createRole)
+  .put([auth.authJWT, auth.checkRole(['admin'])], roles.updateRole)
+  .delete([auth.authJWT, auth.checkRole(['admin'])], roles.deleteRole);
 
 export default router;

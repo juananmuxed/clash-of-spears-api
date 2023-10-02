@@ -16,3 +16,24 @@ components:
         updatedAt:
           type: string
           format: date-time
+    NewUser:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    RefreshToken:
+      type: object
+      properties:
+        refreshToken:
+          type: string

@@ -37,7 +37,7 @@ export class UnitTypesController {
         
       res.json(newUnitType)
     } catch (error) {
-      next(new InternalError())
+      next(new InternalError(undefined, error as ValidationError))
     }
   }
  
@@ -53,7 +53,7 @@ export class UnitTypesController {
         
       res.json(newUnitType)
     } catch (error) {
-      next(new InternalError())
+      next(new InternalError(undefined, error as ValidationError))
     }
   }
 }
