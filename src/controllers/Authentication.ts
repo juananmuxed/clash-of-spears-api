@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextFunction, Request, Response } from "express";
 import { ERRORS } from '../config/data/Errors';
 import { AuthError, InternalError, InvalidLogin, NotFoundError } from '../models/Errors';
-import { Authentication } from '../models/Authentication';
-import { UserItem, Users } from "../db/models/Users";
+import { Authentication, TokenItem } from '../models/Authentication';
+import { UserItem, UserModel, Users } from "../db/models/Users";
 import { Roles } from "../db/models/Roles";
 import { ValidationError } from "sequelize";
 import { TypedRequest } from "../db/models/common/ExpressTypes";
@@ -19,7 +20,7 @@ export class AuthenticationController {
       const verified = authentication.validateToken(auth.split(' ')[1])
 
       if(!verified) next(new AuthError())
-      
+
       res.locals.jwtPayload = verified;
       next()
     } else {
@@ -51,15 +52,16 @@ export class AuthenticationController {
       const user = await Users.findOne({where: { email: body.email }});
 
       if(!user) next(new NotFoundError(ERRORS.NOT_FOUND('User')));
-
       else {
         const validPassword = await authentication.passwordCompare(body.password, user.password || '');
-  
         if(!validPassword) next(new InvalidLogin())
+
+        const { password, updatedAt, createdAt, ...payload} = user.dataValues
+
         res.json({ 
           user: user, 
-          token: authentication.generateToken(user?.dataValues as UserItem), 
-          refreshToken: authentication.generateToken(user?.dataValues as UserItem, secretRefresh) 
+          token: authentication.generateToken(payload), 
+          refreshToken: authentication.generateToken(payload, secretRefresh) 
         })
       }
     } catch (error) {
@@ -76,11 +78,13 @@ export class AuthenticationController {
       if(user) next(new AuthError(ERRORS.IN_USE('Email')));
 
       const newUser = await Users.create(body);
+
+      const { password, updatedAt, createdAt, ...payload} = newUser.dataValues
         
       res.status(201).json({ 
         user: newUser, 
-        token: authentication.generateToken(newUser?.dataValues as UserItem),
-        refreshToken: authentication.generateToken(newUser?.dataValues as UserItem, secretRefresh)
+        token: authentication.generateToken(payload),
+        refreshToken: authentication.generateToken(payload, secretRefresh)
       })
     } catch (error) {
       next(new InternalError(undefined, error as ValidationError))
@@ -96,11 +100,16 @@ export class AuthenticationController {
       const validate = authentication.validateToken(body.refreshToken, secretRefresh);
 
       const user = await Users.findOne({ where: { email: (validate as UserItem).email}});
+
+      if(!user) next(new NotFoundError(ERRORS.NOT_FOUND('User')));
+      else {
+        const { password, updatedAt, createdAt, ...payload} = user.dataValues
         
-      res.status(201).json({ 
-        token: authentication.generateToken(user?.dataValues as UserItem),
-        refreshToken: authentication.generateToken(user?.dataValues as UserItem, secretRefresh)
-      })
+        res.status(201).json({ 
+          token: authentication.generateToken(payload),
+          refreshToken: authentication.generateToken(payload, secretRefresh)
+        })
+      }
     } catch (error) {
       next(new InternalError(undefined, error as ValidationError))
     }

@@ -1,6 +1,8 @@
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import { UserItem } from '../db/models/Users';
+import { UserItem } from './../db/models/Users';
+
+export type TokenItem = Omit<UserItem, 'password' | 'createdAt' | 'updatedAt'>;
 
 export class Authentication {
   private secret: string;
@@ -8,7 +10,7 @@ export class Authentication {
 
   constructor(secret?: string, expiresIn?: string) {
     this.secret = secret || process.env.JWT_SECRET || '12345678';
-    this.expiresIn = expiresIn || process.env.JWT_EXPIRES_IN || '7h';
+    this.expiresIn = expiresIn || process.env.JWT_EXPIRES_IN || '1m';
   }
 
   public passwordHash(password: string) {
@@ -19,7 +21,7 @@ export class Authentication {
     return bcrypt.compare(password, encryptedPassword)
   }
 
-  public generateToken(payload: UserItem, secret?: string) {
+  public generateToken(payload: TokenItem, secret?: string) {
     return jwt.sign(
       payload, 
       secret || this.secret, 
