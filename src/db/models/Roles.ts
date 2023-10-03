@@ -34,4 +34,5 @@ export const Roles = db.define<RoleModel>(
   { underscored: true }
 );
 
+Users.belongsTo(Roles, { foreignKey: 'roleId', as: 'role'})
 Roles.hasMany(Users, { as: "users" });

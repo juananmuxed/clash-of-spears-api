@@ -4,11 +4,16 @@ import { TypedRequest } from "../db/models/common/ExpressTypes";
 import { InternalError, NotFoundError } from "../models/Errors";
 import { ERRORS } from "../config/data/Errors";
 import { ValidationError } from "sequelize";
+import { Expansions } from "../db/models/Expansions";
 
 export class ArmiesController {
   async getArmies(_req: Request, res: Response) {
     const armies = await Armies.findAll({ 
       where: {active: true},
+      include: {
+        model: Expansions,
+        as: 'expansion'
+      }
     });
         
     res.json(armies)

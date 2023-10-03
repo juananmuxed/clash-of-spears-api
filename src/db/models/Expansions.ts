@@ -41,4 +41,5 @@ export const Expansions = db.define<ExpansionModel>(
   { underscored: true }
 );
 
+Armies.belongsTo(Expansions, { foreignKey: 'expansionId', as: 'expansion'})
 Expansions.hasMany(Armies, { as: "armies" });

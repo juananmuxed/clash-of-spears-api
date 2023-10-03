@@ -4,11 +4,17 @@ import { InternalError, NotFoundError } from "../models/Errors";
 import { ERRORS } from "../config/data/Errors";
 import { TypedRequest } from "../db/models/common/ExpressTypes";
 import { ValidationError } from "sequelize";
+import { Roles } from "../db/models/Roles";
 
 export class UsersController {
 
   async getUsers(_req: Request, res: Response) {
-    const users = await Users.findAll();
+    const users = await Users.findAll({
+      include: {
+        model: Roles,
+        as: 'role'
+      }
+    });
     
     res.json(users)
   }
