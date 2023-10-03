@@ -14,9 +14,3 @@ components:
             $ref: '#/components/schemas/Armies'
         active:
           type: boolean
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
