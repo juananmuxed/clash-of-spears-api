@@ -8,7 +8,7 @@ import { ValidationError } from "sequelize";
 
 export class ExpansionsController {
 
-  async getExpansions(_req: Request, res: Response) {
+  getExpansions = async (_req: Request, res: Response) => {
     const expansions = await Expansions.findAll({ 
       where: {active: true},
       include: [
@@ -26,13 +26,13 @@ export class ExpansionsController {
     res.json(expansions)
   }
 
-  async getAllExpansions(_req: Request, res: Response) {
+  getAllExpansions = async (_req: Request, res: Response) => {
     const expansions = await Expansions.findAll();
     
     res.json(expansions)
   }
 
-  async createExpansion(req: TypedRequest<ExpansionItem>, res: Response, next: NextFunction) {
+  createExpansion = async (req: TypedRequest<ExpansionItem>, res: Response, next: NextFunction) => {
     const { body } = req;
     
     try {
@@ -44,7 +44,7 @@ export class ExpansionsController {
     }
   }
 
-  async updateExpansion(req: TypedRequest<ExpansionItem>, res: Response, next: NextFunction) {
+  updateExpansion = async (req: TypedRequest<ExpansionItem>, res: Response, next: NextFunction) => {
     const { body } = req;
     
     try {
@@ -60,7 +60,7 @@ export class ExpansionsController {
     }
   }
  
-  async deleteExpansion(req: TypedRequest<ExpansionItem>, res: Response, next: NextFunction) {
+  deleteExpansion = async (req: TypedRequest<ExpansionItem>, res: Response, next: NextFunction) => {
     const { body } = req;
     
     try {

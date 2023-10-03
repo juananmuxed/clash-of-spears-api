@@ -7,13 +7,13 @@ import { ValidationError } from "sequelize";
 
 export class UnitTypesController {
 
-  async getUnitTypes(_req: Request, res: Response) {
+  getUnitTypes = async (_req: Request, res: Response) => {
     const unitTypes = await UnitTypes.findAll();
     
     res.json(unitTypes)
   }
 
-  async createUnitType(req: TypedRequest<UnitTypeItem>, res: Response, next: NextFunction) {
+  createUnitType = async (req: TypedRequest<UnitTypeItem>, res: Response, next: NextFunction) => {
     const { body } = req;
     
     try {
@@ -25,7 +25,7 @@ export class UnitTypesController {
     }
   }
 
-  async updateUnitType(req: TypedRequest<UnitTypeItem>, res: Response, next: NextFunction) {
+  updateUnitType = async (req: TypedRequest<UnitTypeItem>, res: Response, next: NextFunction) => {
     const { body } = req;
     
     try {
@@ -41,7 +41,7 @@ export class UnitTypesController {
     }
   }
  
-  async deleteUnitType(req: TypedRequest<UnitTypeItem>, res: Response, next: NextFunction) {
+  deleteUnitType = async (req: TypedRequest<UnitTypeItem>, res: Response, next: NextFunction) => {
     const { body } = req;
     
     try {

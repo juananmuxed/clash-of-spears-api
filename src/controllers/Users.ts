@@ -8,7 +8,7 @@ import { Roles } from "../db/models/Roles";
 
 export class UsersController {
 
-  async getUsers(_req: Request, res: Response) {
+  getUsers = async (_req: Request, res: Response) => {
     const users = await Users.findAll({
       include: {
         model: Roles,
@@ -19,7 +19,7 @@ export class UsersController {
     res.json(users)
   }
 
-  async createUser(req: TypedRequest<UserItem>, res: Response, next: NextFunction) {
+  createUser = async (req: TypedRequest<UserItem>, res: Response, next: NextFunction) => {
     const { body } = req;
     
     try {
@@ -31,7 +31,7 @@ export class UsersController {
     }
   }
 
-  async updateUser(req: TypedRequest<UserItem>, res: Response, next: NextFunction) {
+  updateUser = async (req: TypedRequest<UserItem>, res: Response, next: NextFunction) => {
     const { body } = req;
     
     try {
@@ -47,7 +47,7 @@ export class UsersController {
     }
   }
  
-  async deleteUser(req: TypedRequest<UserItem>, res: Response, next: NextFunction) {
+  deleteUser = async (req: TypedRequest<UserItem>, res: Response, next: NextFunction) => {
     const { body } = req;
     
     try {

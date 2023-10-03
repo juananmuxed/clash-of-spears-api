@@ -7,7 +7,7 @@ import { ValidationError } from "sequelize";
 import { Expansions } from "../db/models/Expansions";
 
 export class ArmiesController {
-  async getArmies(_req: Request, res: Response) {
+  getArmies = async (_req: Request, res: Response) => {
     const armies = await Armies.findAll({ 
       where: {active: true},
       include: {
@@ -19,13 +19,13 @@ export class ArmiesController {
     res.json(armies)
   }
 
-  async getAllArmies(_req: Request, res: Response) {
+  getAllArmies = async (_req: Request, res: Response) => {
     const armies = await Armies.findAll();
     
     res.json(armies)
   }
 
-  async createArmy(req: TypedRequest<ArmyItem>, res: Response, next: NextFunction) {
+  createArmy = async (req: TypedRequest<ArmyItem>, res: Response, next: NextFunction) => {
     const { body } = req;
     
     try {
@@ -37,7 +37,7 @@ export class ArmiesController {
     }
   }
   
-  async updateArmy(req: TypedRequest<ArmyItem>, res: Response, next: NextFunction) {
+  updateArmy = async (req: TypedRequest<ArmyItem>, res: Response, next: NextFunction) => {
     const { body } = req;
     
     try {
@@ -53,7 +53,7 @@ export class ArmiesController {
     }
   }
  
-  async deleteArmy(req: TypedRequest<ArmyItem>, res: Response, next: NextFunction) {
+  deleteArmy = async (req: TypedRequest<ArmyItem>, res: Response, next: NextFunction) => {
     const { body } = req;
     
     try {

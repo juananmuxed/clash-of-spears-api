@@ -7,13 +7,13 @@ import { ValidationError } from "sequelize";
 
 export class RolesController {
 
-  async getRoles(_req: Request, res: Response) {
+  getRoles = async (_req: Request, res: Response) => {
     const roles = await Roles.findAll();
     
     res.json(roles)
   }
 
-  async createRole(req: TypedRequest<RoleItem>, res: Response, next: NextFunction) {
+  createRole = async (req: TypedRequest<RoleItem>, res: Response, next: NextFunction) => {
     const { body } = req;
     
     try {
@@ -25,7 +25,7 @@ export class RolesController {
     }
   }
 
-  async updateRole(req: TypedRequest<RoleItem>, res: Response, next: NextFunction) {
+  updateRole = async (req: TypedRequest<RoleItem>, res: Response, next: NextFunction) => {
     const { body } = req;
     
     try {
@@ -41,7 +41,7 @@ export class RolesController {
     }
   }
  
-  async deleteRole(req: TypedRequest<RoleItem>, res: Response, next: NextFunction) {
+  deleteRole = async (req: TypedRequest<RoleItem>, res: Response, next: NextFunction) => {
     const { body } = req;
     
     try {

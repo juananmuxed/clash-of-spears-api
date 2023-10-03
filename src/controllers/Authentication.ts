@@ -13,7 +13,7 @@ const authentication = new Authentication();
 const secretRefresh = process.env.JWT_SECRET_REFRESH || 'refreshSecret';
 
 export class AuthenticationController {
-  authJWT(req: Request, res: Response, next: NextFunction) {
+  authJWT = (req: Request, res: Response, next: NextFunction) => {
     const auth = req.headers.authorization;
 
     if(auth){
@@ -28,7 +28,7 @@ export class AuthenticationController {
     }
   }
 
-  checkRole(roleName: string[]) {
+  checkRole = (roleName: string[]) => {
     return async (_req: Request, res: Response, next: NextFunction) => {
       const jwtPayload = res.locals.jwtPayload as UserItem;
       
@@ -45,7 +45,7 @@ export class AuthenticationController {
     };
   }
 
-  async login(req: TypedRequest<UserItem>, res: Response, next: NextFunction) {
+  login = async (req: TypedRequest<UserItem>, res: Response, next: NextFunction) => {
     const { body } = req;
 
     try {
@@ -69,7 +69,7 @@ export class AuthenticationController {
     }
   }
 
-  async signup(req: TypedRequest<UserItem>, res: Response, next: NextFunction) {
+  signup = async (req: TypedRequest<UserItem>, res: Response, next: NextFunction) => {
     const { body } = req;
     
     try {
@@ -91,7 +91,7 @@ export class AuthenticationController {
     }
   }
 
-  async refreshToken(req: TypedRequest<{ refreshToken: string}>, res: Response, next: NextFunction) {
+  refreshToken = async (req: TypedRequest<{ refreshToken: string}>, res: Response, next: NextFunction) => {
     const { body } = req;
         
     try {
