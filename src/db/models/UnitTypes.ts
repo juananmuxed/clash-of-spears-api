@@ -18,4 +18,4 @@ export const UnitTypes = db.define<UnitTypeModel>('unit_types', {
     type: DataTypes.STRING(20),
     unique: true,
   }
-}, { underscored: true })
+}, { underscored: true, timestamps: false })

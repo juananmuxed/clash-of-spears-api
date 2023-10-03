@@ -7,8 +7,6 @@ export interface ArmyItem {
   active: boolean;
   imgUrl?: string;
   expansionId?: number;
-  createdAt?: Date;
-  updatedAt?: Date;
 }
 
 export interface ArmyModel extends Model<InferAttributes<ArmyModel>, InferCreationAttributes<ArmyModel>>, ArmyItem {}
@@ -29,4 +27,4 @@ export const Armies = db.define<ArmyModel>('armies', {
   imgUrl: {
     type: DataTypes.STRING(255)
   },
-}, { underscored: true})
+}, { underscored: true, timestamps: false})

@@ -48,5 +48,5 @@ const encryptPassword = async (user: UserModel) => {
   if(user.changed('password')) user.set('password', await auth.passwordHash(user.password))
 }
 
-Users.beforeCreate(encryptPassword)
-Users.beforeUpdate(encryptPassword)
+Users.beforeCreate(encryptPassword);
+Users.beforeUpdate(encryptPassword);

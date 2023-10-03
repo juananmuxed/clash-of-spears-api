@@ -6,13 +6,13 @@ import {
 } from "sequelize";
 import { db } from "../Connection";
 import { Armies } from "./Armies";
+import { Weapons } from "./Weapons";
 
 export interface ExpansionItem {
   id: number;
   name: string;
   active: boolean;
-  createdAt?: Date;
-  updatedAt?: Date;
+  book?: string;
 }
 
 export interface ExpansionModel
@@ -37,9 +37,15 @@ export const Expansions = db.define<ExpansionModel>(
     active: {
       type: DataTypes.BOOLEAN,
     },
+    book: {
+      type: DataTypes.STRING(255),
+    },
   },
-  { underscored: true }
+  { underscored: true, timestamps: false }
 );
 
 Armies.belongsTo(Expansions, { foreignKey: 'expansionId', as: 'expansion'})
 Expansions.hasMany(Armies, { as: "armies" });
+
+Weapons.belongsTo(Expansions, { foreignKey: 'expansionId', as: 'book'})
+Expansions.hasMany(Weapons, { as: "weapons" });

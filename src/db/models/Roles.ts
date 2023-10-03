@@ -10,8 +10,6 @@ import { Users } from "./Users";
 export interface RoleItem {
   id: number;
   name: string;
-  createdAt?: Date;
-  updatedAt?: Date;
 }
 
 export interface RoleModel
@@ -31,7 +29,7 @@ export const Roles = db.define<RoleModel>(
       unique: true,
     },
   },
-  { underscored: true }
+  { underscored: true, timestamps: false }
 );
 
 Users.belongsTo(Roles, { foreignKey: 'roleId', as: 'role'})
