@@ -10,10 +10,11 @@ import { useDefaultErrorHandler, useErrorHandler } from '../middlewares/ErrorHan
 
 import expansionsRoutes from '../routes/Expansions'
 import armiesRoutes from '../routes/Armies'
+import weaponsRoutes from '../routes/Weapons'
 import unitTypesRoutes from '../routes/UnitTypes'
 import usersRoutes from '../routes/Users'
 import rolesRoutes from '../routes/Roles'
-import rolesAuthentication from '../routes/Authentication'
+import authenticationRoutes from '../routes/Authentication'
 
 const log = useLoggerServer();
 
@@ -26,6 +27,7 @@ export class Server {
     docs: this.rootPath + 'docs',
     expansions: this.rootPath + 'expansions',
     armies: this.rootPath + 'armies',
+    weapons: this.rootPath + 'weapons',
     unitTypes: this.rootPath + 'unit-types',
     users: this.rootPath + 'users',
     roles: this.rootPath + 'roles',
@@ -62,9 +64,10 @@ export class Server {
     this.app.use(this.apiPaths.expansions, expansionsRoutes);
     this.app.use(this.apiPaths.armies, armiesRoutes);
     this.app.use(this.apiPaths.unitTypes, unitTypesRoutes);
+    this.app.use(this.apiPaths.weapons, weaponsRoutes);
     this.app.use(this.apiPaths.users, usersRoutes);
     this.app.use(this.apiPaths.roles, rolesRoutes);
-    this.app.use(this.apiPaths.authentication, rolesAuthentication);
+    this.app.use(this.apiPaths.authentication, authenticationRoutes);
   }
 
   swagger() {

@@ -1,0 +1,18 @@
+components:
+  schemas:
+    Weapons:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        rangeShort:
+          type: number
+        rangeLong:
+          type: number
+        saveModification:
+          type: number
+        initiative:
+          type: number
+        bookPage:
+          type: number
