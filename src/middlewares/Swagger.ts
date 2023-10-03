@@ -21,7 +21,7 @@ export const useSwaggerOptions = () => {
         },
       ],
     },
-    apis: ['./src/**/*.yml'],
+    apis: ['./src/docs/**/*.yml'],
   };
   return swaggerOptions;
 };
