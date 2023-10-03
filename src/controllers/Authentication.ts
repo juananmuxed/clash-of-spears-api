@@ -31,7 +31,7 @@ export class AuthenticationController {
   checkRole = (roleName: string[]) => {
     return async (_req: Request, res: Response, next: NextFunction) => {
       const jwtPayload = res.locals.jwtPayload as UserItem;
-      
+
       try {
         const user = await Users.findOne({ where: { email: jwtPayload.email}});
         const roles = await Roles.findAll({ where: { name: roleName}})
@@ -58,10 +58,10 @@ export class AuthenticationController {
 
         const { password, updatedAt, createdAt, ...payload} = user.dataValues
 
-        res.json({ 
-          user: user, 
-          token: authentication.generateToken(payload), 
-          refreshToken: authentication.generateToken(payload, secretRefresh) 
+        res.json({
+          user: user,
+          token: authentication.generateToken(payload),
+          refreshToken: authentication.generateToken(payload, secretRefresh)
         })
       }
     } catch (error) {
@@ -71,7 +71,7 @@ export class AuthenticationController {
 
   signup = async (req: TypedRequest<UserItem>, res: Response, next: NextFunction) => {
     const { body } = req;
-    
+
     try {
       const user = await Users.findOne({where: { email: body.email }});
 
@@ -80,9 +80,9 @@ export class AuthenticationController {
       const newUser = await Users.create(body);
 
       const { password, updatedAt, createdAt, ...payload} = newUser.dataValues
-        
-      res.status(201).json({ 
-        user: newUser, 
+
+      res.status(201).json({
+        user: newUser,
         token: authentication.generateToken(payload),
         refreshToken: authentication.generateToken(payload, secretRefresh)
       })
@@ -93,7 +93,7 @@ export class AuthenticationController {
 
   refreshToken = async (req: TypedRequest<{ refreshToken: string}>, res: Response, next: NextFunction) => {
     const { body } = req;
-        
+
     try {
       if(!body.refreshToken) next(new NotFoundError(ERRORS.NOT_FOUND('Refresh token')));
 
@@ -104,8 +104,8 @@ export class AuthenticationController {
       if(!user) next(new NotFoundError(ERRORS.NOT_FOUND('User')));
       else {
         const { password, updatedAt, createdAt, ...payload} = user.dataValues
-        
-        res.status(201).json({ 
+
+        res.status(201).json({
           token: authentication.generateToken(payload),
           refreshToken: authentication.generateToken(payload, secretRefresh)
         })

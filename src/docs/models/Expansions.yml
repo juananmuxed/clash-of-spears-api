@@ -10,7 +10,7 @@ components:
           type: string
         armies:
           type: array
-          items: 
+          items:
             $ref: '#/components/schemas/Armies'
         active:
           type: boolean

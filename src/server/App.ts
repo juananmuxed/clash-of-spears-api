@@ -71,13 +71,13 @@ export class Server {
   }
 
   swagger() {
-    this.app.use(this.apiPaths.docs, swaggerUI.serve, swaggerUI.setup(useSwagger(), { 
-      swaggerOptions: { 
+    this.app.use(this.apiPaths.docs, swaggerUI.serve, swaggerUI.setup(useSwagger(), {
+      swaggerOptions: {
         docExpansion: 'none'
       }
     }));
   }
-  
+
   errorHandler() {
     this.app.use(useDefaultErrorHandler)
     this.app.use(useErrorHandler)

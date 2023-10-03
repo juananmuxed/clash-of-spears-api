@@ -9,9 +9,9 @@ import { Expansions } from "../db/models/Expansions";
 export class WeaponsController {
 
   private getWeaponById(id?: number) {
-    return Weapons.findByPk(id, {     
+    return Weapons.findByPk(id, {
       include: [
-        { 
+        {
           model: Expansions,
           as: 'book',
           required: false,
@@ -28,9 +28,9 @@ export class WeaponsController {
   }
 
   getWeapons = async (_req: Request, res: Response) => {
-    const weapons = await Weapons.findAll({ 
+    const weapons = await Weapons.findAll({
       include: [
-        { 
+        {
           model: Expansions,
           as: 'book',
           required: false,
@@ -41,30 +41,30 @@ export class WeaponsController {
         {
           model: WeaponTypes,
           as: 'types',
-          required: false,    
+          required: false,
           through: {
             attributes: []
           }
         }
       ]
     });
-    
+
     res.json(weapons)
   }
 
   getAllWeapons = async (_req: Request, res: Response) => {
     const weapons = await Weapons.findAll();
-    
+
     res.json(weapons)
   }
 
   createWeapon = async (req: TypedRequest<WeaponItem>, res: Response, next: NextFunction) => {
     const { body } = req;
-    
+
     try {
       const newWeapon = await Weapons.create(body);
       if(body.types) await newWeapon?.setTypes(body.types)
-        
+
       res.status(201).json(await this.getWeaponById(newWeapon.id))
     } catch (error) {
       next(new InternalError(undefined, error as ValidationError))
@@ -73,31 +73,31 @@ export class WeaponsController {
 
   updateWeapon = async (req: TypedRequest<WeaponItem>, res: Response, next: NextFunction) => {
     const { body } = req;
-    
+
     try {
       const weapon = await Weapons.findByPk(body.id);
 
       if(!weapon) next(new NotFoundError(ERRORS.NOT_FOUND('Weapon')))
-      
+
       const newWeapon = await weapon?.update(body);
       if(body.types) await newWeapon?.setTypes(body.types);
-        
+
       res.json(await this.getWeaponById(newWeapon?.id))
     } catch (error) {
       next(new InternalError(undefined, error as ValidationError))
     }
   }
- 
+
   deleteWeapon = async (req: TypedRequest<WeaponItem>, res: Response, next: NextFunction) => {
     const { body } = req;
-    
+
     try {
       const weapon = await Weapons.findByPk(body.id);
 
       if(!weapon) next(new NotFoundError(ERRORS.NOT_FOUND('Weapon')))
-      
+
       const newWeapon = await weapon?.destroy()
-        
+
       res.json(newWeapon)
     } catch (error) {
       next(new InternalError(undefined, error as ValidationError))

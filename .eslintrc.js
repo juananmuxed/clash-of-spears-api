@@ -49,7 +49,7 @@ module.exports = {
       ignoreComments: true,
       ignoreRegExpLiterals: true,
     }],
-    
+
     'arrow-body-style': 'off',
     'class-methods-use-this': 'off',
     'no-unused-expressions': [

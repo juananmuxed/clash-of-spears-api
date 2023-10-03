@@ -15,16 +15,16 @@ export class UsersController {
         as: 'role'
       }
     });
-    
+
     res.json(users)
   }
 
   createUser = async (req: TypedRequest<UserItem>, res: Response, next: NextFunction) => {
     const { body } = req;
-    
+
     try {
       const newUser = await Users.create(body);
-        
+
       res.status(201).json(newUser)
     } catch (error) {
       next(new InternalError(undefined, error as ValidationError))
@@ -33,30 +33,30 @@ export class UsersController {
 
   updateUser = async (req: TypedRequest<UserItem>, res: Response, next: NextFunction) => {
     const { body } = req;
-    
+
     try {
       const user = await Users.findByPk(body.id);
 
       if(!user) next(new NotFoundError(ERRORS.NOT_FOUND('User')))
-      
+
       const newUser = await user?.update(body)
-        
+
       res.json(newUser)
     } catch (error) {
       next(new InternalError(undefined, error as ValidationError))
     }
   }
- 
+
   deleteUser = async (req: TypedRequest<UserItem>, res: Response, next: NextFunction) => {
     const { body } = req;
-    
+
     try {
       const user = await Users.findByPk(body.id);
 
       if(!user) next(new NotFoundError(ERRORS.NOT_FOUND('User')))
-      
+
       const newUser = await user?.destroy()
-        
+
       res.json(newUser)
     } catch (error) {
       next(new InternalError(undefined, error as ValidationError))

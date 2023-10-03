@@ -1,21 +1,110 @@
 {
-    "workbench.colorCustomizations": {
-        "activityBar.activeBackground": "#b2b05f",
-        "activityBar.background": "#b2b05f",
-        "activityBar.foreground": "#15202b",
-        "activityBar.inactiveForeground": "#15202b99",
-        "activityBarBadge.background": "#e9f5f4",
-        "activityBarBadge.foreground": "#15202b",
-        "commandCenter.border": "#15202b99",
-        "sash.hoverBorder": "#b2b05f",
-        "statusBar.background": "#969448",
-        "statusBar.foreground": "#15202b",
-        "statusBarItem.hoverBackground": "#747237",
-        "statusBarItem.remoteBackground": "#969448",
-        "statusBarItem.remoteForeground": "#15202b",
-        "titleBar.activeBackground": "#969448",
-        "titleBar.activeForeground": "#15202b",
-        "titleBar.inactiveBackground": "#96944899",
-        "titleBar.inactiveForeground": "#15202b99"
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "[javascript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[yaml]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    "source.fixAll.stylelint": true,
+  },
+  "editor.formatOnSaveMode": "modificationsIfAvailable",
+  "editor.formatOnPaste": false,
+  "editor.formatOnType": false,
+  "editor.formatOnSave": true,
+  "javascript.validate.enable": false,
+  "javascript.format.enable": false,
+  "prettier.enable": false,
+  "eslint.format.enable": true,
+  "eslint.validate": [
+    "javascript",
+    "typescript",
+  ],
+  "eslint.options": {
+    "extensions": [
+      ".html",
+      ".js",
+      ".ts",
+    ]
+  },
+  "html.format.enable": false,
+  "emmet.triggerExpansionOnTab": true,
+  "files.exclude": {
+    "**/*.log": true,
+    "**/*.log*": true,
+    "**/dist": false
+  },
+  "files.associations": {
+    ".babelrc": "jsonc",
+    ".eslintrc": "jsonc",
+    ".markdownlintrc": "jsonc",
+    "*.config.js": "javascript",
+    "*.spec.js": "javascript",
+  },
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "files.trimTrailingWhitespace": true,
+  "files.autoSave": "onWindowChange",
+  "turboConsoleLog.quote": "'",
+  "turboConsoleLog.addSemicolonInTheEnd": true,
+  "todo-tree.highlights.defaultHighlight": {
+    "type": "text",
+    "opacity": 80
+  },
+  "todo-tree.highlights.customHighlight": {
+    "TODO": {
+      "icon": "check",
+      "iconColour": "#39c5cf",
+      "background": "#00575e79",
+      "gutterIcon": true
+    },
+    "FIXME": {
+      "foreground": "#f8f8f8",
+      "background": "#b82525",
+      "iconColour": "#dd7d00",
+      "gutterIcon": true
     }
+  },
+  "cSpell.language": "en,es",
+  "i18n-ally.displayLanguage": "es",
+  "i18n-ally.extract.keyMaxLength": 145,
+  "i18n-ally.sourceLanguage": "es",
+  "i18n-ally.keystyle": "nested",
+  "i18n-ally.localesPaths": "locales",
+  "i18n-ally.sortKeys": true,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "eslint.codeActionsOnSave.mode": "problems",
+  "testing.automaticallyOpenPeekView": "never",
+  "workbench.colorCustomizations": {
+    "activityBar.activeBackground": "#b2b05f",
+    "activityBar.background": "#b2b05f",
+    "activityBar.foreground": "#15202b",
+    "activityBar.inactiveForeground": "#15202b99",
+    "activityBarBadge.background": "#e9f5f4",
+    "activityBarBadge.foreground": "#15202b",
+    "commandCenter.border": "#15202b99",
+    "sash.hoverBorder": "#b2b05f",
+    "statusBar.background": "#969448",
+    "statusBar.foreground": "#15202b",
+    "statusBarItem.hoverBackground": "#747237",
+    "statusBarItem.remoteBackground": "#969448",
+    "statusBarItem.remoteForeground": "#15202b",
+    "titleBar.activeBackground": "#969448",
+    "titleBar.activeForeground": "#15202b",
+    "titleBar.inactiveBackground": "#96944899",
+    "titleBar.inactiveForeground": "#15202b99"
+  }
 }

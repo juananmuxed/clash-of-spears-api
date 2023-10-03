@@ -23,8 +23,8 @@ export class Authentication {
 
   public generateToken(payload: TokenItem, secret?: string) {
     return jwt.sign(
-      payload, 
-      secret || this.secret, 
+      payload,
+      secret || this.secret,
       { expiresIn: this.expiresIn }
     )
   }
