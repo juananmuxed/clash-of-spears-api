@@ -13,9 +13,9 @@
     "docker:run": "docker run -d --restart always -p 3000:3000 --env-file .env.production --name cos-api-container --add-host host.docker.internal:host-gateway cos-api",
     "docker:prune": "yes | docker system prune -a",
     "docker:deploy": "npm run docker:stop && npm run docker:build && npm run docker:clear && npm run docker:run && npm run docker:prune",
-    "patch": "npm version patch -m \"🩹 Patch upgrade to version %s\" & git push origin %s",
-    "minor": "npm version minor -m \"💊 Minor upgrade to version %s\" & git push origin %s",
-    "major": "npm version major -m \"🎉 Major upgrade to version %s\" & git push origin %s",
+    "patch": "npm version patch -m \"🩹 Patch upgrade to version %s\" & git push --tags",
+    "minor": "npm version minor -m \"💊 Minor upgrade to version %s\" & git push --tags",
+    "major": "npm version major -m \"🎉 Major upgrade to version %s\" & git push --tags",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
