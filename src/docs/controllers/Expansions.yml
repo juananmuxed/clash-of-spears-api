@@ -121,3 +121,24 @@ paths:
               application/json:
                 schema:
                   $ref: '#/components/schemas/Error'
+  /api/expansions/:id:
+    get:
+        tags:
+            - Expansions
+        summary: Get complete expansion by id
+        description: Get a complete expansion
+        security:
+          - bearerAuth: []
+        responses:
+          '200':
+            description: Success
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ExpansionComplete'
+          '400':
+            description: An error has ocurred
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'

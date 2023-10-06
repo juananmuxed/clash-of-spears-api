@@ -1,6 +1,6 @@
 components:
   schemas:
-    Weapons:
+    Armors:
       type: object
       properties:
         id:
@@ -8,14 +8,10 @@ components:
           example: 1
         name:
           type: string
-        rangeShort:
+        value:
           type: number
-        rangeLong:
-          type: number
-        saveModification:
-          type: number
-        initiative:
-          type: number
+        special:
+          type: boolean
         expansionId:
           type: number
         bookPage:

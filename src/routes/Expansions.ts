@@ -13,6 +13,9 @@ router.route('/')
   .put([auth.authJWT, auth.checkRole(['editor', 'admin'])], expansions.updateExpansion)
   .delete([auth.authJWT, auth.checkRole(['editor', 'admin'])], expansions.deleteExpansion);
 
-router.get('/all', [auth.authJWT, auth.checkRole(['editor', 'admin'])],  expansions.getAllExpansions)
+router.get('/all', [auth.authJWT, auth.checkRole(['editor', 'admin'])],  expansions.getAllExpansions);
+
+//TODO: block with auth & role
+router.get('/:id',  expansions.getExpansion);
 
 export default router;

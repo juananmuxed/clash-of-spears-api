@@ -8,9 +8,33 @@ components:
           example: 1
         name:
           type: string
+        book:
+          type: string
+        active:
+          type: boolean
+    ExpansionComplete:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        name:
+          type: string
         armies:
           type: array
           items:
             $ref: '#/components/schemas/Armies'
+        weapons:
+          type: array
+          items:
+            $ref: '#/components/schemas/Weapons'
+        armors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Armors'
+        traits:
+          type: array
+          items:
+            $ref: '#/components/schemas/Traits'
         active:
           type: boolean

@@ -7,6 +7,7 @@ const router = Router();
 const weapons = new WeaponsController();
 const auth = new AuthenticationController();
 
+//TODO: block with auth & role
 router.route('/')
   .get(weapons.getWeapons)
   .post( weapons.createWeapon)

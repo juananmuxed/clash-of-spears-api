@@ -5,25 +5,59 @@ import { ERRORS } from "../config/data/Errors";
 import { TypedRequest } from "../db/models/common/ExpressTypes";
 import { Armies } from "../db/models/Armies";
 import { ValidationError } from "sequelize";
+import { Weapons } from "../db/models/Weapons";
+import { Traits } from "../db/models/Traits";
+import { Armors } from "../db/models/Armors";
 
 export class ExpansionsController {
 
   getExpansions = async (_req: Request, res: Response) => {
     const expansions = await Expansions.findAll({
       where: {active: true},
-      include: [
-        {
-          model: Armies,
-          as: 'armies',
-          required: false,
-          where: {
-            active: true
-          }
-        }
-      ]
     });
 
     res.json(expansions)
+  }
+
+  getExpansion = async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params
+
+    try {
+
+      const expansion = await Expansions.findByPk(id, {
+        include: [
+          {
+            model: Armies,
+            as: 'armies',
+            required: false,
+            where: {
+              active: true
+            }
+          },
+          {
+            model: Weapons,
+            as: 'weapons',
+            required: false,
+          },
+          {
+            model: Armors,
+            as: 'armors',
+            required: false,
+          },
+          {
+            model: Traits,
+            as: 'traits',
+            required: false,
+          },
+        ]
+      });
+
+      if(!expansion) next(new NotFoundError(ERRORS.NOT_FOUND('Expansion')))
+
+      res.json(expansion)
+    } catch (error) {
+      next(new InternalError(undefined, error as ValidationError))
+    }
   }
 
   getAllExpansions = async (_req: Request, res: Response) => {

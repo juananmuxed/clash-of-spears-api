@@ -8,6 +8,8 @@ export type ApiPaths = {
   expansions: string;
   armies: string;
   weapons: string;
+  armors: string;
+  traits: string;
   unitTypes: string;
   users: string;
   roles: string;
