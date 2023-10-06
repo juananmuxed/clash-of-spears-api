@@ -7,7 +7,7 @@
     "dev": "nodemon - exec 'ts-node' src/index.ts",
     "lint": "eslint . - ext .ts",
     "build": "tsc",
-    "docker:stop": "docker stop cos-api-container",
+    "docker:stop": "docker stop cos-api-container || true",
     "docker:build": "docker build . -t cos-api:latest",
     "docker:clear": "docker rm cos-api-container",
     "docker:run": "docker run -d --restart always -p 3000:3000 --env-file .env.production --name cos-api-container --add-host host.docker.internal:host-gateway cos-api",
