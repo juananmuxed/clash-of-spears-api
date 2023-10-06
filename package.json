@@ -15,8 +15,8 @@
     "docker:deploy": "npm run docker:stop && npm run docker:build && npm run docker:clear && npm run docker:run && npm run docker:prune",
     "version": "npm run version:patch",
     "version:patch": "npm version patch -m \"🩹 Patch upgrade to version %s\"",
-    "version:minor": "npm version patch -m \"🩹 Patch upgrade to version %s\"",
-    "version:major": "npm version patch -m \"🩹 Patch upgrade to version %s\"",
+    "version:minor": "npm version minor -m \"💊 Minor upgrade to version %s\"",
+    "version:major": "npm version major -m \"🎉 Major upgrade to version %s\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
