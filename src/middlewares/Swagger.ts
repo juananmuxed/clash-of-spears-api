@@ -16,13 +16,19 @@ export const useSwaggerOptions = () => {
       },
       servers: [
         {
-          url: 'http://localhost:3000',
+          url: 'http://localhost:3000/api',
           description: 'Development server',
         },
       ],
     },
     apis: ['./src/docs/**/*.yml'],
   };
+  if(process.env.NODE_ENV === 'production' && swaggerOptions.definition) {
+    swaggerOptions.definition.servers = [{
+      url: 'https://clash.muxed.dev/api',
+      description: 'Clash of Spears API',
+    }]
+  }
   return swaggerOptions;
 };
 

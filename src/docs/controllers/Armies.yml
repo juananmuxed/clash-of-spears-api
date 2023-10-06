@@ -1,5 +1,5 @@
 paths:
-  /api/armies/:
+  /armies/:
     get:
         tags:
             - Armies
@@ -98,7 +98,7 @@ paths:
               application/json:
                 schema:
                   $ref: '#/components/schemas/InternalError'
-  /api/armies/all:
+  /armies/all:
     get:
         tags:
             - Armies

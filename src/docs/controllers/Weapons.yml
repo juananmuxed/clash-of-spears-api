@@ -1,5 +1,5 @@
 paths:
-  /api/weapons/:
+  /weapons/:
     get:
         tags:
             - Weapons
@@ -98,7 +98,7 @@ paths:
               application/json:
                 schema:
                   $ref: '#/components/schemas/InternalError'
-  /api/weapons/all:
+  /weapons/all:
     get:
         tags:
             - Weapons

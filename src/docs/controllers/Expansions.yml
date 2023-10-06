@@ -1,5 +1,5 @@
 paths:
-  /api/expansions/:
+  /expansions/:
     get:
         tags:
             - Expansions
@@ -98,7 +98,7 @@ paths:
               application/json:
                 schema:
                   $ref: '#/components/schemas/InternalError'
-  /api/expansions/all:
+  /expansions/all:
     get:
         tags:
             - Expansions
@@ -121,7 +121,7 @@ paths:
               application/json:
                 schema:
                   $ref: '#/components/schemas/Error'
-  /api/expansions/:id:
+  /expansions/:id:
     get:
         tags:
             - Expansions

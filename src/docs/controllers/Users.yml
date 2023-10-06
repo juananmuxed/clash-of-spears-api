@@ -1,5 +1,5 @@
 paths:
-  /api/users/:
+  /users/:
     get:
         tags:
             - Users
