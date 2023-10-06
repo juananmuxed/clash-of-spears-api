@@ -1,9 +1,9 @@
 
 # ⚔️ Clash of Spears API REST
- 
+
  ⌨️ with ❤︎ by <a href="https://muxed.dev">MuXeD</a>
 
- 
+
 [![License](https://img.shields.io/github/license/juananmuxed/clash-of-spears-api?label=License)](LICENSE) [![Discord](https://img.shields.io/discord/324463341819133953?color=purple&label=Discord&logo=discord)](https://discord.gg/88rzwfU)
 
 ### GitHub Status
@@ -12,7 +12,7 @@
 
 ### Demo deploy status
 
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/juananmuxed/clash-of-spears-api/deploy.yml?label=Workflow)](https://cos.muxed.es) [![Website](https://img.shields.io/website?down_color=red&down_message=Offline&label=Website&up_color=green&up_message=Online&url=https://cos.muxed.es)](https://cos.muxed.es) 
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/juananmuxed/clash-of-spears-api/deploy.yml?label=Workflow)](https://cos.muxed.es) [![Website](https://img.shields.io/website?down_color=red&down_message=Offline&label=Website&up_color=green&up_message=Online&url=https://clash.muxed.dev/api/docs)](https://clash.muxed.dev/api/docs)
 
 ## 🎱 Introduction
 
@@ -69,7 +69,7 @@ And you can access to the swagger via web browser in http://localhost:3000/swagg
 
 ## Docker production
 
-Create a `.env.production` with params of DB and run `npm run docker:deploy` 
+Create a `.env.production` with params of DB and run `npm run docker:deploy`
 
 Remember you need a Database with a `name-of-table` table chosen in the `.env.production` file.
 
