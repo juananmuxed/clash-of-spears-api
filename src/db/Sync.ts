@@ -7,14 +7,14 @@ import { UnitTypes } from "./models/UnitTypes";
 import { Users } from "./models/Users";
 import { WeaponTypes, Weapons } from "./models/Weapons";
 
-export const syncDatabase = () => {
-  Armies.sync();
-  Armors.sync();
-  Expansions.sync();
-  Roles.sync();
-  Traits.sync();
-  UnitTypes.sync();
-  Users.sync();
-  Weapons.sync();
-  WeaponTypes.sync();
+export const syncDatabase = async () => {
+  await Roles.sync();
+  await Users.sync();
+  await Expansions.sync();
+  await Armies.sync();
+  await Armors.sync();
+  await Traits.sync();
+  await UnitTypes.sync();
+  await Weapons.sync();
+  await WeaponTypes.sync();
 }

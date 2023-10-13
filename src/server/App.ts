@@ -8,6 +8,7 @@ import { useSwagger } from '../middlewares/Swagger';
 import { useDefaultErrorHandler, useErrorHandler } from '../middlewares/ErrorHandler';
 import { apiPaths, setRoutes } from '../routes/Main';
 import { syncDatabase } from '../db/Sync';
+import { seedDatabase } from '../db/Seed';
 
 const log = useLoggerServer();
 
@@ -26,7 +27,10 @@ export class Server {
     this.routes();
     this.swagger();
     this.errorHandler();
-    this.syncDatabase();
+    this.syncDatabase()
+      .then(() => {
+        this.seedDatabase();
+      });
   }
 
   async dbConnection() {
@@ -47,8 +51,12 @@ export class Server {
     setRoutes(this.app);
   }
 
-  syncDatabase() {
-    syncDatabase();
+  async syncDatabase() {
+    await syncDatabase();
+  }
+
+  async seedDatabase() {
+    await seedDatabase();
   }
 
   swagger() {

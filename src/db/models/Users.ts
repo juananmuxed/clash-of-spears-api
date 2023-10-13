@@ -8,7 +8,7 @@ import { db } from "../Connection";
 import { Authentication } from "../../models/Authentication";
 
 export interface UserItem {
-  id: number;
+  id?: number;
   email: string;
   password: string;
   username: string;
