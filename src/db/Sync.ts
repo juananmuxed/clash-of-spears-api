@@ -5,7 +5,7 @@ import { Roles } from "./models/Roles";
 import { Traits } from "./models/Traits";
 import { UnitTypes } from "./models/UnitTypes";
 import { Users } from "./models/Users";
-import { WeaponTypes, Weapons } from "./models/Weapons";
+import { WeaponTypes, Weapons, WeaponsWeaponTypes } from "./models/Weapons";
 
 export const syncDatabase = async () => {
   await Roles.sync();
@@ -17,4 +17,5 @@ export const syncDatabase = async () => {
   await UnitTypes.sync();
   await Weapons.sync();
   await WeaponTypes.sync();
+  await WeaponsWeaponTypes.sync();
 }
