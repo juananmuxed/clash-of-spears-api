@@ -14,6 +14,7 @@ export interface UnitTypeItem {
 export interface UnitItem {
   id: number;
   name: string;
+  unitType: number;
   combat?: number;
   ranged?: number;
   grit?: number;
@@ -51,6 +52,10 @@ export const Units = db.define<UnitModel>('units',
       type: DataTypes.STRING(40),
       allowNull: false,
       unique: true,
+    },
+    unitType: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
     },
     combat: DataTypes.TINYINT,
     ranged: DataTypes.TINYINT,
@@ -90,26 +95,6 @@ export const UnitTypes = db.define<UnitTypeModel>('unit_type',
   },
   { underscored: true, timestamps: false }
 );
-
-export const UnitsUnitTypes = db.define('units_unit_type', {
-  unitId: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: Units,
-      key: 'id'
-    }
-  },
-  unitTypeId: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: UnitTypes,
-      key: 'id'
-    }
-  }
-}, { underscored: true, timestamps: false });
-
-Units.belongsToMany(UnitTypes, { through: UnitsUnitTypes, as: 'types' });
-UnitTypes.belongsToMany(Units, { through: UnitsUnitTypes, as: 'units' });
 
 export const UnitsTraits = db.define('units_traits', {
   unitId: {
@@ -176,3 +161,5 @@ Units.belongsTo(Armors, { foreignKey: 'defaultBarding', as: 'barding' });
 Units.belongsTo(Armors, { foreignKey: 'defaultShield', as: 'shield' });
 
 Units.belongsTo(Weapons, { foreignKey: 'defaultWeapon', as: 'weapon'});
+
+Units.belongsTo(UnitTypes, { foreignKey: 'unitTypeId', as: 'type'} );

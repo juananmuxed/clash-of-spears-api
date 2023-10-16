@@ -1,9 +1,9 @@
-import { DataTypes, InferAttributes, InferCreationAttributes, Model } from "sequelize";
+import { DataTypes, HasManyAddAssociationsMixin, HasManyGetAssociationsMixin, HasManySetAssociationsMixin, InferAttributes, InferCreationAttributes, Model } from "sequelize";
 import { db } from "../Connection";
-import { Armies } from "./Armies";
-import { Armors } from "./Armors";
-import { Weapons } from "./Weapons";
-import { Traits } from "./Traits";
+import { Armies, ArmyModel } from "./Armies";
+import { ArmorModel, Armors } from "./Armors";
+import { WeaponModel, Weapons } from "./Weapons";
+import { TraitModel, Traits } from "./Traits";
 
 export interface OptionItem {
   id: number;
@@ -11,10 +11,42 @@ export interface OptionItem {
   cost: number;
   fixedCost?: number;
   fixedUnits?: number;
+  armies?: number[];
+  incompatibleShields?: number[];
+  neededWeapons?: number[];
+  incompatibleWeapons?: number[];
+  upgradeTraits?: number[];
+  neededTraits?: number[];
+  removeTraits?: number[];
+  incompatibleTraits?: number[];
   upgradeWeapon?: number;
   upgradeBody?: number;
   upgradeShield?: number;
   upgradeBarding?: number;
+  addArmies: HasManyAddAssociationsMixin<ArmyModel, number>;
+  getArmies: HasManyGetAssociationsMixin<ArmyModel>;
+  setArmies: HasManySetAssociationsMixin<ArmyModel, number>;
+  addIncompatibleShields: HasManyAddAssociationsMixin<ArmorModel, number>;
+  getIncompatibleShields: HasManyGetAssociationsMixin<ArmorModel>;
+  setIncompatibleShields: HasManySetAssociationsMixin<ArmorModel, number>;
+  addNeededWeapons: HasManyAddAssociationsMixin<WeaponModel, number>;
+  getNeededWeapons: HasManyGetAssociationsMixin<WeaponModel>;
+  setNeededWeapons: HasManySetAssociationsMixin<WeaponModel, number>;
+  addIncompatibleWeapons: HasManyAddAssociationsMixin<WeaponModel, number>;
+  getIncompatibleWeapons: HasManyGetAssociationsMixin<WeaponModel>;
+  setIncompatibleWeapons: HasManySetAssociationsMixin<WeaponModel, number>;
+  addUpgradeTraits: HasManyAddAssociationsMixin<TraitModel, number>;
+  getUpgradeTraits: HasManyGetAssociationsMixin<TraitModel>;
+  setUpgradeTraits: HasManySetAssociationsMixin<TraitModel, number>;
+  addNeededTraits: HasManyAddAssociationsMixin<TraitModel, number>;
+  getNeededTraits: HasManyGetAssociationsMixin<TraitModel>;
+  setNeededTraits: HasManySetAssociationsMixin<TraitModel, number>;
+  addRemoveTraits: HasManyAddAssociationsMixin<TraitModel, number>;
+  getRemoveTraits: HasManyGetAssociationsMixin<TraitModel>;
+  setRemoveTraits: HasManySetAssociationsMixin<TraitModel, number>;
+  addIncompatibleTraits: HasManyAddAssociationsMixin<TraitModel, number>;
+  getIncompatibleTraits: HasManyGetAssociationsMixin<TraitModel>;
+  setIncompatibleTraits: HasManySetAssociationsMixin<TraitModel, number>;
 }
 
 export interface OptionModel extends Model<InferAttributes<OptionModel>, InferCreationAttributes<OptionModel>>, OptionItem {}
