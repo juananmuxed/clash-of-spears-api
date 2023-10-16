@@ -6,41 +6,29 @@ import { TypedRequest } from "../db/models/common/ExpressTypes";
 import { ValidationError } from "sequelize";
 import { Expansions } from "../db/models/Expansions";
 
+const include = [
+  {
+    model: Expansions,
+    as: 'book',
+    required: false,
+    where: {
+      active: true
+    }
+  },
+];
+
 export class TraitsController {
 
   private getTraitById(id?: number) {
     return Traits.findByPk(id, {
-      include: [
-        {
-          model: Expansions,
-          as: 'book',
-          required: false,
-          where: {
-            active: true
-          }
-        },
-      ]});
+      include
+    });
   }
 
   getTraits = async (_req: Request, res: Response) => {
     const traits = await Traits.findAll({
-      include: [
-        {
-          model: Expansions,
-          as: 'book',
-          required: false,
-          where: {
-            active: true
-          }
-        },
-      ]
+      include
     });
-
-    res.json(traits)
-  }
-
-  getAllTraits = async (_req: Request, res: Response) => {
-    const traits = await Traits.findAll();
 
     res.json(traits)
   }

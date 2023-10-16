@@ -6,54 +6,37 @@ import { TypedRequest } from "../db/models/common/ExpressTypes";
 import { ValidationError } from "sequelize";
 import { Expansions } from "../db/models/Expansions";
 
+const include = [
+  {
+    model: Expansions,
+    as: 'book',
+    required: false,
+    where: {
+      active: true
+    }
+  },
+  {
+    model: WeaponTypes,
+    as: 'types',
+    required: false,
+    through: {
+      attributes: []
+    }
+  }
+];
+
 export class WeaponsController {
 
   private getWeaponById(id?: number) {
     return Weapons.findByPk(id, {
-      include: [
-        {
-          model: Expansions,
-          as: 'book',
-          required: false,
-          where: {
-            active: true
-          }
-        },
-        {
-          model: WeaponTypes,
-          as: 'types',
-          required: false,
-        }
-      ]});
+      include
+    });
   }
 
   getWeapons = async (_req: Request, res: Response) => {
     const weapons = await Weapons.findAll({
-      include: [
-        {
-          model: Expansions,
-          as: 'book',
-          required: false,
-          where: {
-            active: true
-          }
-        },
-        {
-          model: WeaponTypes,
-          as: 'types',
-          required: false,
-          through: {
-            attributes: []
-          }
-        }
-      ]
+      include
     });
-
-    res.json(weapons)
-  }
-
-  getAllWeapons = async (_req: Request, res: Response) => {
-    const weapons = await Weapons.findAll();
 
     res.json(weapons)
   }

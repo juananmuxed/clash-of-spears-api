@@ -39,12 +39,6 @@ export class ArmorsController {
     res.json(armors)
   }
 
-  getAllArmors = async (_req: Request, res: Response) => {
-    const armors = await Armors.findAll();
-
-    res.json(armors)
-  }
-
   createArmor = async (req: TypedRequest<ArmorItem>, res: Response, next: NextFunction) => {
     const { body } = req;
 

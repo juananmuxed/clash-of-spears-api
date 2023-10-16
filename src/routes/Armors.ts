@@ -14,6 +14,4 @@ router.route('/')
   .put( armors.updateArmor)
   .delete([auth.authJWT, auth.checkRole(['editor', 'admin'])], armors.deleteArmor);
 
-router.get('/all', [auth.authJWT, auth.checkRole(['editor', 'admin'])],  armors.getAllArmors)
-
 export default router;

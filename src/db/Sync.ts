@@ -4,7 +4,7 @@ import { Expansions } from "./models/Expansions";
 import { Options, OptionsArmies, OptionsArmors, OptionsTraits, OptionsWeapons } from "./models/Options";
 import { Roles } from "./models/Roles";
 import { Traits } from "./models/Traits";
-import { UnitTypes, Units, UnitsArmies, UnitsOptions, UnitsTraits, UnitsUnitTypes } from "./models/Units";
+import { UnitTypes, Units, UnitsArmies, UnitsOptions, UnitsTraits } from "./models/Units";
 import { Users } from "./models/Users";
 import { WeaponTypes, Weapons, WeaponsWeaponTypes } from "./models/Weapons";
 
@@ -24,7 +24,6 @@ export const syncDatabase = async () => {
   await UnitsArmies.sync();
   await UnitsTraits.sync();
   await UnitsOptions.sync();
-  await UnitsUnitTypes.sync();
   await OptionsArmies.sync();
   await OptionsArmors.sync();
   await OptionsWeapons.sync();

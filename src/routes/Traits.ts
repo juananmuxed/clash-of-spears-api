@@ -14,6 +14,4 @@ router.route('/')
   .put( traits.updateTrait)
   .delete([auth.authJWT, auth.checkRole(['editor', 'admin'])], traits.deleteTrait);
 
-router.get('/all', [auth.authJWT, auth.checkRole(['editor', 'admin'])],  traits.getAllTraits)
-
 export default router;

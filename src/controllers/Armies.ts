@@ -41,11 +41,11 @@ export class ArmiesController {
     const { body } = req;
 
     try {
-      const expansion = await Armies.findByPk(body.id);
+      const army = await Armies.findByPk(body.id);
 
-      if(!expansion) next(new NotFoundError(ERRORS.NOT_FOUND('Army')))
+      if(!army) next(new NotFoundError(ERRORS.NOT_FOUND('Army')))
 
-      const newArmy = await expansion?.update(body)
+      const newArmy = await army?.update(body)
 
       res.json(newArmy)
     } catch (error) {
@@ -57,11 +57,11 @@ export class ArmiesController {
     const { body } = req;
 
     try {
-      const expansion = await Armies.findByPk(body.id);
+      const army = await Armies.findByPk(body.id);
 
-      if(!expansion) next(new NotFoundError(ERRORS.NOT_FOUND('Army')))
+      if(!army) next(new NotFoundError(ERRORS.NOT_FOUND('Army')))
 
-      const newArmy = await expansion?.destroy()
+      const newArmy = await army?.destroy()
 
       res.json(newArmy)
     } catch (error) {

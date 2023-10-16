@@ -9,11 +9,38 @@ import { Weapons } from "../db/models/Weapons";
 import { Traits } from "../db/models/Traits";
 import { Armors } from "../db/models/Armors";
 
+const include = [
+  {
+    model: Armies,
+    as: 'armies',
+    required: false,
+    where: {
+      active: true
+    }
+  },
+  {
+    model: Weapons,
+    as: 'weapons',
+    required: false,
+  },
+  {
+    model: Armors,
+    as: 'armors',
+    required: false,
+  },
+  {
+    model: Traits,
+    as: 'traits',
+    required: false,
+  },
+];
+
 export class ExpansionsController {
 
   getExpansions = async (_req: Request, res: Response) => {
     const expansions = await Expansions.findAll({
       where: {active: true},
+      include
     });
 
     res.json(expansions)
@@ -25,31 +52,7 @@ export class ExpansionsController {
     try {
 
       const expansion = await Expansions.findByPk(id, {
-        include: [
-          {
-            model: Armies,
-            as: 'armies',
-            required: false,
-            where: {
-              active: true
-            }
-          },
-          {
-            model: Weapons,
-            as: 'weapons',
-            required: false,
-          },
-          {
-            model: Armors,
-            as: 'armors',
-            required: false,
-          },
-          {
-            model: Traits,
-            as: 'traits',
-            required: false,
-          },
-        ]
+        include
       });
 
       if(!expansion) next(new NotFoundError(ERRORS.NOT_FOUND('Expansion')))
@@ -58,12 +61,6 @@ export class ExpansionsController {
     } catch (error) {
       next(new InternalError(undefined, error as ValidationError))
     }
-  }
-
-  getAllExpansions = async (_req: Request, res: Response) => {
-    const expansions = await Expansions.findAll();
-
-    res.json(expansions)
   }
 
   createExpansion = async (req: TypedRequest<ExpansionItem>, res: Response, next: NextFunction) => {

@@ -14,6 +14,4 @@ router.route('/')
   .put( weapons.updateWeapon)
   .delete([auth.authJWT, auth.checkRole(['editor', 'admin'])], weapons.deleteWeapon);
 
-router.get('/all', [auth.authJWT, auth.checkRole(['editor', 'admin'])],  weapons.getAllWeapons)
-
 export default router;
