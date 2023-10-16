@@ -1,10 +1,10 @@
 paths:
-  /weapons/:
+  /armors/:
     get:
         tags:
-            - Weapons
-        summary: Get weapons
-        description: Use to get all active weapons
+            - Armors
+        summary: Get armors
+        description: Use to get all active armors
         responses:
           '200':
             description: Success
@@ -13,7 +13,7 @@ paths:
                 schema:
                   type: array
                   items:
-                    $ref: '#/components/schemas/Weapons'
+                    $ref: '#/components/schemas/Armors'
           '400':
             description: An error has ocurred
             content:
@@ -22,9 +22,9 @@ paths:
                   $ref: '#/components/schemas/Error'
     post:
         tags:
-            - Weapons
-        summary: Create new weapon
-        description: Use to create a weapon
+            - Armors
+        summary: Create new armor
+        description: Use to create a armor
         security:
           - bearerAuth: []
         responses:
@@ -33,7 +33,7 @@ paths:
             content:
               application/json:
                 schema:
-                  $ref: '#/components/schemas/Weapons'
+                  $ref: '#/components/schemas/Armors'
           '400':
             description: An error has ocurred
             content:
@@ -48,9 +48,9 @@ paths:
                   $ref: '#/components/schemas/InternalError'
     put:
         tags:
-            - Weapons
-        summary: Update new weapon
-        description: Use to update a weapon
+            - Armors
+        summary: Update new armor
+        description: Use to update a armor
         security:
           - bearerAuth: []
         responses:
@@ -59,7 +59,7 @@ paths:
             content:
               application/json:
                 schema:
-                  $ref: '#/components/schemas/Weapons'
+                  $ref: '#/components/schemas/Armors'
           '400':
             description: An error has ocurred
             content:
@@ -74,9 +74,9 @@ paths:
                   $ref: '#/components/schemas/InternalError'
     delete:
         tags:
-            - Weapons
-        summary: Delete weapon
-        description: Use to delete a weapon
+            - Armors
+        summary: Delete armor
+        description: Use to delete a armor
         security:
           - bearerAuth: []
         responses:
@@ -85,7 +85,7 @@ paths:
             content:
               application/json:
                 schema:
-                  $ref: '#/components/schemas/Weapons'
+                  $ref: '#/components/schemas/Armors'
           '400':
             description: An error has ocurred
             content:

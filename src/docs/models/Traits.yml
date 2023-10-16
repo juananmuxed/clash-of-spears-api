@@ -16,3 +16,5 @@ components:
           type: number
         bookPage:
           type: number
+        book:
+          $ref: '#/components/schemas/Expansions'

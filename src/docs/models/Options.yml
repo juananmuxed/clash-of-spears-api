@@ -1,0 +1,64 @@
+components:
+  schemas:
+    Options:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        name:
+          type: string
+        cost:
+          type: number
+        fixedCost:
+          type: number
+        fixedUnits:
+          type: number
+        upgradeBody:
+          type: number
+        upgradeShield:
+          type: number
+        upgradeBarding:
+          type: number
+        upgradeWeapon:
+          type: number
+        weapon:
+          $ref: '#/components/schemas/Weapons'
+        body:
+          $ref: '#/components/schemas/Armors'
+        shield:
+          $ref: '#/components/schemas/Armors'
+        barding:
+          $ref: '#/components/schemas/Armors'
+        armies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Armies'
+        incompatibleShields:
+          type: array
+          items:
+            $ref: '#/components/schemas/Armors'
+        neededWeapons:
+          type: array
+          items:
+            $ref: '#/components/schemas/Weapons'
+        incompatibleWeapons:
+          type: array
+          items:
+            $ref: '#/components/schemas/Weapons'
+        upgradeTraits:
+          type: array
+          items:
+            $ref: '#/components/schemas/Traits'
+        neededTraits:
+          type: array
+          items:
+            $ref: '#/components/schemas/Traits'
+        removeTraits:
+          type: array
+          items:
+            $ref: '#/components/schemas/Traits'
+        incompatibleTraits:
+          type: array
+          items:
+            $ref: '#/components/schemas/Traits'
