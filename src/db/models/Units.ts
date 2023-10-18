@@ -1,8 +1,8 @@
-import { DataTypes, InferAttributes, InferCreationAttributes, Model } from "sequelize";
+import { DataTypes, HasManyAddAssociationsMixin, HasManyGetAssociationsMixin, HasManySetAssociationsMixin, InferAttributes, InferCreationAttributes, Model } from "sequelize";
 import { db } from "../Connection";
-import { Traits } from "./Traits";
-import { Armies } from "./Armies";
-import { Options } from "./Options";
+import { TraitModel, Traits } from "./Traits";
+import { Armies, ArmyModel } from "./Armies";
+import { OptionModel, Options } from "./Options";
 import { Armors } from "./Armors";
 import { Weapons } from "./Weapons";
 
@@ -35,6 +35,18 @@ export interface UnitItem {
   freeUnits?: number;
   commandRange?: number;
   commandPoints?: number;
+  armies?: number[];
+  traits?: number[];
+  options?: number[];
+  addArmies: HasManyAddAssociationsMixin<ArmyModel, number>;
+  getArmies: HasManyGetAssociationsMixin<ArmyModel>;
+  setArmies: HasManySetAssociationsMixin<ArmyModel, number>;
+  addTraits: HasManyAddAssociationsMixin<TraitModel, number>;
+  getTraits: HasManyGetAssociationsMixin<TraitModel>;
+  setTraits: HasManySetAssociationsMixin<TraitModel, number>;
+  addOptions: HasManyAddAssociationsMixin<OptionModel, number>;
+  getOptions: HasManyGetAssociationsMixin<OptionModel>;
+  setOptions: HasManySetAssociationsMixin<OptionModel, number>;
 }
 
 export interface UnitModel extends Model<InferAttributes<UnitModel>, InferCreationAttributes<UnitModel>>, UnitItem {}
@@ -162,4 +174,4 @@ Units.belongsTo(Armors, { foreignKey: 'defaultShield', as: 'shield' });
 
 Units.belongsTo(Weapons, { foreignKey: 'defaultWeapon', as: 'weapon'});
 
-Units.belongsTo(UnitTypes, { foreignKey: 'unitTypeId', as: 'type'} );
+Units.belongsTo(UnitTypes, { foreignKey: 'unitType', as: 'type'} );

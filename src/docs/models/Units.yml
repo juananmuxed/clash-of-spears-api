@@ -1,0 +1,82 @@
+components:
+  schemas:
+    UnitTypes:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        name:
+          type: string
+    Units:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        name:
+          type: string
+        cost:
+          type: number
+        unitType:
+          type: number
+        combat:
+          type: number
+        ranged:
+          type: number
+        grit:
+          type: number
+        defaultWeapon:
+          type: number
+        defaultBody:
+          type: number
+        defaultBarding:
+          type: number
+        defaultShield:
+          type: number
+        fixedFigures:
+          type: number
+        fixedSave:
+          type: number
+        fixedCost:
+          type: number
+        notForBreak:
+          type: boolean
+        countsDouble:
+          type: boolean
+        noCountForBreak:
+          type: boolean
+        isLeader:
+          type: boolean
+        noStats:
+          type: boolean
+        zeroFigures:
+          type: boolean
+        freeUnits:
+          type: number
+        commandRange:
+          type: number
+        commandPoints:
+          type: number
+        type:
+          $ref: '#/components/schemas/UnitTypes'
+        weapon:
+          $ref: '#/components/schemas/Weapons'
+        body:
+          $ref: '#/components/schemas/Armors'
+        shield:
+          $ref: '#/components/schemas/Armors'
+        barding:
+          $ref: '#/components/schemas/Armors'
+        armies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Armies'
+        traits:
+          type: array
+          items:
+            $ref: '#/components/schemas/Traits'
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/Options'

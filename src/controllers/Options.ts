@@ -99,6 +99,8 @@ const include = [
   }
 ]
 
+export { include as includeOptions }
+
 export class OptionsController {
   private getOptionById(id?: number) {
     return Options.findByPk(id, { include });
