@@ -14,4 +14,6 @@ router.route('/')
   .put( options.updateOption)
   .delete([auth.authJWT, auth.checkRole(['editor', 'admin'])], options.deleteOption);
 
+router.get('/admin', options.getOptionsPaginated);
+
 export default router;

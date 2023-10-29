@@ -4,6 +4,8 @@ import { InternalError, NotFoundError } from "../models/Errors";
 import { ERRORS } from "../config/data/Errors";
 import { TypedRequest } from "../db/models/common/ExpressTypes";
 import { ValidationError } from "sequelize";
+import { getPagination, getOrder } from './utils/Pagination';
+import { Pagination } from "../models/Pagination";
 
 export class RolesController {
 
@@ -11,6 +13,24 @@ export class RolesController {
     const roles = await Roles.findAll();
 
     res.json(roles)
+  }
+
+  getRolesPaginated = async (req: TypedRequest<Pagination>, res: Response) => {
+    const { page, rowsPerPage, sortBy, descending } = req.query;
+
+    const pagedRoles = await Roles.findAndCountAll({
+      ...getPagination(Number(page), Number(rowsPerPage)),
+      ...getOrder(sortBy?.toString() || 'id', descending === 'true')
+    });
+
+    res.json({
+      page: Number(page),
+      rowsPerPage: Number(rowsPerPage),
+      rowsNumber: pagedRoles.count,
+      rows: pagedRoles.rows,
+      sortBy: sortBy?.toString() || 'id',
+      descending: descending === 'true',
+    })
   }
 
   createRole = async (req: TypedRequest<RoleItem>, res: Response, next: NextFunction) => {

@@ -98,3 +98,24 @@ paths:
               application/json:
                 schema:
                   $ref: '#/components/schemas/InternalError'
+  /weapons/admin:
+    get:
+        tags:
+            - Weapons
+        summary: Get weapons paginated
+        description: Use to get all active weapons paginated
+        responses:
+          '200':
+            description: Success
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/PagedWeapons'
+          '400':
+            description: An error has ocurred
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'

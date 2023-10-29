@@ -14,6 +14,8 @@ router.route('/')
   .put( armies.updateArmy)
   .delete([auth.authJWT, auth.checkRole(['editor', 'admin'])], armies.deleteArmy);
 
-router.get('/all', [auth.authJWT, auth.checkRole(['editor', 'admin'])],  armies.getAllArmies)
+router.get('/admin', armies.getArmiesPaginated)
+
+router.get('/all', [auth.authJWT, auth.checkRole(['editor', 'admin'])], armies.getAllArmies)
 
 export default router;

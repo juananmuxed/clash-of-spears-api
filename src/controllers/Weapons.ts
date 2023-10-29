@@ -5,6 +5,8 @@ import { ERRORS } from "../config/data/Errors";
 import { TypedRequest } from "../db/models/common/ExpressTypes";
 import { ValidationError } from "sequelize";
 import { Expansions } from "../db/models/Expansions";
+import { getPagination, getOrder } from './utils/Pagination';
+import { Pagination } from "../models/Pagination";
 
 const include = [
   {
@@ -39,6 +41,25 @@ export class WeaponsController {
     });
 
     res.json(weapons)
+  }
+
+  getWeaponsPaginated = async (req: TypedRequest<Pagination>, res: Response) => {
+    const { page, rowsPerPage, sortBy, descending } = req.query;
+
+    const pagedWeapons = await Weapons.findAndCountAll({
+      include,
+      ...getPagination(Number(page), Number(rowsPerPage)),
+      ...getOrder(sortBy?.toString() || 'id', descending === 'true')
+    });
+
+    res.json({
+      page: Number(page),
+      rowsPerPage: Number(rowsPerPage),
+      rowsNumber: pagedWeapons.count,
+      rows: pagedWeapons.rows,
+      sortBy: sortBy?.toString() || 'id',
+      descending: descending === 'true',
+    })
   }
 
   createWeapon = async (req: TypedRequest<WeaponItem>, res: Response, next: NextFunction) => {

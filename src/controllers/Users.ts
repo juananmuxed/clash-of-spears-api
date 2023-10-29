@@ -5,18 +5,41 @@ import { ERRORS } from "../config/data/Errors";
 import { TypedRequest } from "../db/models/common/ExpressTypes";
 import { ValidationError } from "sequelize";
 import { Roles } from "../db/models/Roles";
+import { getPagination, getOrder } from './utils/Pagination';
+import { Pagination } from "../models/Pagination";
+
+const include = {
+  model: Roles,
+  as: 'role'
+}
 
 export class UsersController {
 
   getUsers = async (_req: Request, res: Response) => {
     const users = await Users.findAll({
-      include: {
-        model: Roles,
-        as: 'role'
-      }
+      include
     });
 
     res.json(users)
+  }
+
+  getUsersPaginated = async (req: TypedRequest<Pagination>, res: Response) => {
+    const { page, rowsPerPage, sortBy, descending } = req.query;
+
+    const pagedUsers = await Users.findAndCountAll({
+      include,
+      ...getPagination(Number(page), Number(rowsPerPage)),
+      ...getOrder(sortBy?.toString() || 'id', descending === 'true')
+    });
+
+    res.json({
+      page: Number(page),
+      rowsPerPage: Number(rowsPerPage),
+      rowsNumber: pagedUsers.count,
+      rows: pagedUsers.rows,
+      sortBy: sortBy?.toString() || 'id',
+      descending: descending === 'true',
+    })
   }
 
   createUser = async (req: TypedRequest<UserItem>, res: Response, next: NextFunction) => {

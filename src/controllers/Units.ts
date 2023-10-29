@@ -10,6 +10,8 @@ import { InternalError, NotFoundError } from "../models/Errors";
 import { ValidationError } from "sequelize";
 import { ERRORS } from "../config/data/Errors";
 import { includeOptions } from "./Options";
+import { getPagination, getOrder } from './utils/Pagination';
+import { Pagination } from "../models/Pagination";
 
 const include = [
   {
@@ -72,13 +74,31 @@ export class UnitsController {
     return Units.findByPk(id, { include });
   }
 
-
   getUnits = async (_req: Request, res: Response) => {
     const options = await Units.findAll({
       include
     });
 
     res.json(options);
+  }
+
+  getUnitsPaginated = async (req: TypedRequest<Pagination>, res: Response) => {
+    const { page, rowsPerPage, sortBy, descending } = req.query;
+
+    const pagedUnits = await Units.findAndCountAll({
+      include,
+      ...getPagination(Number(page), Number(rowsPerPage)),
+      ...getOrder(sortBy?.toString() || 'id', descending === 'true')
+    });
+
+    res.json({
+      page: Number(page),
+      rowsPerPage: Number(rowsPerPage),
+      rowsNumber: pagedUnits.count,
+      rows: pagedUnits.rows,
+      sortBy: sortBy?.toString() || 'id',
+      descending: descending === 'true',
+    })
   }
 
   createUnit = async (req: TypedRequest<UnitItem>, res: Response, next: NextFunction) => {

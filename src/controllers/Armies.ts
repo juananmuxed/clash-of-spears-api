@@ -5,6 +5,8 @@ import { InternalError, NotFoundError } from "../models/Errors";
 import { ERRORS } from "../config/data/Errors";
 import { ValidationError } from "sequelize";
 import { Expansions } from "../db/models/Expansions";
+import { getPagination, getOrder } from './utils/Pagination';
+import { Pagination } from "../models/Pagination";
 
 export class ArmiesController {
   getArmies = async (_req: Request, res: Response) => {
@@ -17,6 +19,24 @@ export class ArmiesController {
     });
 
     res.json(armies)
+  }
+
+  getArmiesPaginated = async (req: TypedRequest<Pagination>, res: Response) => {
+    const { page, rowsPerPage, sortBy, descending } = req.query;
+
+    const pagedArmies = await Armies.findAndCountAll({
+      ...getPagination(Number(page), Number(rowsPerPage)),
+      ...getOrder(sortBy?.toString() || 'id', descending === 'true')
+    });
+
+    res.json({
+      page: Number(page),
+      rowsPerPage: Number(rowsPerPage),
+      rowsNumber: pagedArmies.count,
+      rows: pagedArmies.rows,
+      sortBy: sortBy?.toString() || 'id',
+      descending: descending === 'true',
+    })
   }
 
   getAllArmies = async (_req: Request, res: Response) => {

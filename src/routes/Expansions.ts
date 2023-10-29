@@ -16,4 +16,6 @@ router.route('/')
 //TODO: block with auth & role
 router.get('/:id',  expansions.getExpansion);
 
+router.get('/admin', expansions.getExpansionsPaginated);
+
 export default router;

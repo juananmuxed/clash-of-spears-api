@@ -13,4 +13,6 @@ router.route('/')
   .put([auth.authJWT, auth.checkRole(['admin'])], users.updateUser)
   .delete([auth.authJWT, auth.checkRole(['admin'])], users.deleteUser);
 
+router.get('/admin', [auth.authJWT, auth.checkRole(['admin'])], users.getUsersPaginated);
+
 export default router;

@@ -14,4 +14,6 @@ router.route('/')
   .put( weapons.updateWeapon)
   .delete([auth.authJWT, auth.checkRole(['editor', 'admin'])], weapons.deleteWeapon);
 
+router.get('/admin', weapons.getWeaponsPaginated);
+
 export default router;

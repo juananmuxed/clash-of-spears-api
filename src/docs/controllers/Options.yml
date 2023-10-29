@@ -98,3 +98,24 @@ paths:
               application/json:
                 schema:
                   $ref: '#/components/schemas/InternalError'
+  /options/admin:
+    get:
+        tags:
+            - Options
+        summary: Get options paginated
+        description: Use to get all active options paginated
+        responses:
+          '200':
+            description: Success
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/PagedOptions'
+          '400':
+            description: An error has ocurred
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'

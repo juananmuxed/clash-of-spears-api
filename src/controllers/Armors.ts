@@ -5,38 +5,53 @@ import { ERRORS } from "../config/data/Errors";
 import { TypedRequest } from "../db/models/common/ExpressTypes";
 import { ValidationError } from "sequelize";
 import { Expansions } from "../db/models/Expansions";
+import { getPagination, getOrder } from './utils/Pagination';
+import { Pagination } from "../models/Pagination";
+
+const include = [
+  {
+    model: Expansions,
+    as: 'book',
+    required: false,
+    where: {
+      active: true
+    }
+  },
+]
 
 export class ArmorsController {
 
   private getArmorById(id?: number) {
     return Armors.findByPk(id, {
-      include: [
-        {
-          model: Expansions,
-          as: 'book',
-          required: false,
-          where: {
-            active: true
-          }
-        },
-      ]});
+      include
+    });
   }
 
   getArmors = async (_req: Request, res: Response) => {
     const armors = await Armors.findAll({
-      include: [
-        {
-          model: Expansions,
-          as: 'book',
-          required: false,
-          where: {
-            active: true
-          }
-        },
-      ]
+      include
     });
 
     res.json(armors)
+  }
+
+  getArmorsPaginated = async (req: TypedRequest<Pagination>, res: Response) => {
+    const { page, rowsPerPage, sortBy, descending } = req.query;
+
+    const pagedArmors = await Armors.findAndCountAll({
+      include,
+      ...getPagination(Number(page), Number(rowsPerPage)),
+      ...getOrder(sortBy?.toString() || 'id', descending === 'true')
+    });
+
+    res.json({
+      page: Number(page),
+      rowsPerPage: Number(rowsPerPage),
+      rowsNumber: pagedArmors.count,
+      rows: pagedArmors.rows,
+      sortBy: sortBy?.toString() || 'id',
+      descending: descending === 'true',
+    })
   }
 
   createArmor = async (req: TypedRequest<ArmorItem>, res: Response, next: NextFunction) => {

@@ -8,6 +8,8 @@ import { ValidationError } from "sequelize";
 import { Weapons } from "../db/models/Weapons";
 import { Traits } from "../db/models/Traits";
 import { Armors } from "../db/models/Armors";
+import { getPagination, getOrder } from './utils/Pagination';
+import { Pagination } from "../models/Pagination";
 
 const include = [
   {
@@ -44,6 +46,25 @@ export class ExpansionsController {
     });
 
     res.json(expansions)
+  }
+
+  getExpansionsPaginated = async (req: TypedRequest<Pagination>, res: Response) => {
+    const { page, rowsPerPage, sortBy, descending } = req.query;
+
+    const pagedExpansions = await Expansions.findAndCountAll({
+      include,
+      ...getPagination(Number(page), Number(rowsPerPage)),
+      ...getOrder(sortBy?.toString() || 'id', descending === 'true')
+    });
+
+    res.json({
+      page: Number(page),
+      rowsPerPage: Number(rowsPerPage),
+      rowsNumber: pagedExpansions.count,
+      rows: pagedExpansions.rows,
+      sortBy: sortBy?.toString() || 'id',
+      descending: descending === 'true',
+    })
   }
 
   getExpansion = async (req: Request, res: Response, next: NextFunction) => {

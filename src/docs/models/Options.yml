@@ -62,3 +62,20 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Traits'
+    PagedOptions:
+      type: object
+      properties:
+        page:
+          type: number
+        rowsPerPage:
+          type: number
+        rowsNumber:
+          type: number
+        rows:
+          type: array
+          items:
+            $ref: '#/components/schemas/Options'
+        sortBy:
+          type: string
+        descending:
+          type: boolean

@@ -98,3 +98,24 @@ paths:
               application/json:
                 schema:
                   $ref: '#/components/schemas/InternalError'
+  /traits/admin:
+    get:
+        tags:
+            - Traits
+        summary: Get traits paginated
+        description: Use to get all active traits paginated
+        responses:
+          '200':
+            description: Success
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/PagedTraits'
+          '400':
+            description: An error has ocurred
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'

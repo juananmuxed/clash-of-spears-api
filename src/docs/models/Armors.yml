@@ -18,3 +18,20 @@ components:
           type: number
         book:
           $ref: '#/components/schemas/Expansions'
+    PagedArmors:
+      type: object
+      properties:
+        page:
+          type: number
+        rowsPerPage:
+          type: number
+        rowsNumber:
+          type: number
+        rows:
+          type: array
+          items:
+            $ref: '#/components/schemas/Armors'
+        sortBy:
+          type: string
+        descending:
+          type: boolean

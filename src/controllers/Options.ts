@@ -8,6 +8,8 @@ import { TypedRequest } from "../db/models/common/ExpressTypes";
 import { InternalError, NotFoundError } from "../models/Errors";
 import { ValidationError } from "sequelize";
 import { ERRORS } from "../config/data/Errors";
+import { getPagination, getOrder } from './utils/Pagination';
+import { Pagination } from "../models/Pagination";
 
 const include = [
   {
@@ -112,6 +114,25 @@ export class OptionsController {
     });
 
     res.json(options);
+  }
+
+  getOptionsPaginated = async (req: TypedRequest<Pagination>, res: Response) => {
+    const { page, rowsPerPage, sortBy, descending } = req.query;
+
+    const pagedOptions = await Options.findAndCountAll({
+      include,
+      ...getPagination(Number(page), Number(rowsPerPage)),
+      ...getOrder(sortBy?.toString() || 'id', descending === 'true')
+    });
+
+    res.json({
+      page: Number(page),
+      rowsPerPage: Number(rowsPerPage),
+      rowsNumber: pagedOptions.count,
+      rows: pagedOptions.rows,
+      sortBy: sortBy?.toString() || 'id',
+      descending: descending === 'true',
+    })
   }
 
   createOption = async (req: TypedRequest<OptionItem>, res: Response, next: NextFunction) => {

@@ -100,3 +100,24 @@ paths:
               application/json:
                 schema:
                   $ref: '#/components/schemas/InternalError'
+  /roles/admin:
+    get:
+        tags:
+            - Roles
+        summary: Get roles paginated
+        description: Use to get all active roles paginated
+        responses:
+          '200':
+            description: Success
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/PagedRoles'
+          '400':
+            description: An error has ocurred
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'

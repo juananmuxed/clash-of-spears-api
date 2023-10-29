@@ -5,6 +5,8 @@ import { ERRORS } from "../config/data/Errors";
 import { TypedRequest } from "../db/models/common/ExpressTypes";
 import { ValidationError } from "sequelize";
 import { Expansions } from "../db/models/Expansions";
+import { getPagination, getOrder } from './utils/Pagination';
+import { Pagination } from "../models/Pagination";
 
 const include = [
   {
@@ -31,6 +33,25 @@ export class TraitsController {
     });
 
     res.json(traits)
+  }
+
+  getTraitsPaginated = async (req: TypedRequest<Pagination>, res: Response) => {
+    const { page, rowsPerPage, sortBy, descending } = req.query;
+
+    const pagedTraits = await Traits.findAndCountAll({
+      include,
+      ...getPagination(Number(page), Number(rowsPerPage)),
+      ...getOrder(sortBy?.toString() || 'id', descending === 'true')
+    });
+
+    res.json({
+      page: Number(page),
+      rowsPerPage: Number(rowsPerPage),
+      rowsNumber: pagedTraits.count,
+      rows: pagedTraits.rows,
+      sortBy: sortBy?.toString() || 'id',
+      descending: descending === 'true',
+    })
   }
 
   createTrait = async (req: TypedRequest<TraitItem>, res: Response, next: NextFunction) => {

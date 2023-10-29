@@ -22,3 +22,20 @@ components:
           type: number
         book:
           $ref: '#/components/schemas/Expansions'
+    PagedWeapons:
+      type: object
+      properties:
+        page:
+          type: number
+        rowsPerPage:
+          type: number
+        rowsNumber:
+          type: number
+        rows:
+          type: array
+          items:
+            $ref: '#/components/schemas/Weapons'
+        sortBy:
+          type: string
+        descending:
+          type: boolean

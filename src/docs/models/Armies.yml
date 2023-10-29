@@ -15,3 +15,20 @@ components:
           type: string
         active:
           type: boolean
+    PagedArmies:
+      type: object
+      properties:
+        page:
+          type: number
+        rowsPerPage:
+          type: number
+        rowsNumber:
+          type: number
+        rows:
+          type: array
+          items:
+            $ref: '#/components/schemas/Armies'
+        sortBy:
+          type: string
+        descending:
+          type: boolean
