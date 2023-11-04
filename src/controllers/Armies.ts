@@ -24,6 +24,8 @@ export class ArmiesController {
   getArmiesPaginated = async (req: TypedRequest<Pagination>, res: Response) => {
     const { page, rowsPerPage, sortBy, descending } = req.query;
 
+    const pagination = getPagination(Number(page), Number(rowsPerPage))
+
     const pagedArmies = await Armies.findAndCountAll({
       ...getPagination(Number(page), Number(rowsPerPage)),
       ...getOrder(sortBy?.toString() || 'id', descending === 'true')
@@ -31,7 +33,7 @@ export class ArmiesController {
 
     res.json({
       page: Number(page),
-      rowsPerPage: Number(rowsPerPage),
+      rowsPerPage: pagination.limit,
       rowsNumber: pagedArmies.count,
       rows: pagedArmies.rows,
       sortBy: sortBy?.toString() || 'id',

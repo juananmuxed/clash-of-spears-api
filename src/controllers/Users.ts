@@ -26,15 +26,17 @@ export class UsersController {
   getUsersPaginated = async (req: TypedRequest<Pagination>, res: Response) => {
     const { page, rowsPerPage, sortBy, descending } = req.query;
 
+    const pagination = getPagination(Number(page), Number(rowsPerPage))
+
     const pagedUsers = await Users.findAndCountAll({
       include,
-      ...getPagination(Number(page), Number(rowsPerPage)),
+      ...pagination,
       ...getOrder(sortBy?.toString() || 'id', descending === 'true')
     });
 
     res.json({
       page: Number(page),
-      rowsPerPage: Number(rowsPerPage),
+      rowsPerPage: pagination.limit,
       rowsNumber: pagedUsers.count,
       rows: pagedUsers.rows,
       sortBy: sortBy?.toString() || 'id',

@@ -18,14 +18,16 @@ export class RolesController {
   getRolesPaginated = async (req: TypedRequest<Pagination>, res: Response) => {
     const { page, rowsPerPage, sortBy, descending } = req.query;
 
+    const pagination = getPagination(Number(page), Number(rowsPerPage))
+
     const pagedRoles = await Roles.findAndCountAll({
-      ...getPagination(Number(page), Number(rowsPerPage)),
+      ...pagination,
       ...getOrder(sortBy?.toString() || 'id', descending === 'true')
     });
 
     res.json({
       page: Number(page),
-      rowsPerPage: Number(rowsPerPage),
+      rowsPerPage: pagination.limit,
       rowsNumber: pagedRoles.count,
       rows: pagedRoles.rows,
       sortBy: sortBy?.toString() || 'id',

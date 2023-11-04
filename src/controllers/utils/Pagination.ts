@@ -2,7 +2,7 @@ import { Order } from "sequelize";
 import { DEFAULT_PAGINATION } from "../../config/data/DefaultPagination";
 
 export const getPagination = (page?: number, rowsPerPage?:  number) => {
-  const limit = rowsPerPage ?? DEFAULT_PAGINATION.SIZE;
+  const limit = (rowsPerPage === 0 || rowsPerPage === undefined) ? DEFAULT_PAGINATION.SIZE : rowsPerPage;
   const offset = page ? (page - 1) * limit : (DEFAULT_PAGINATION.PAGE - 1);
 
   return { limit, offset };

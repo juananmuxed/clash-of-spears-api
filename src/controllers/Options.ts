@@ -119,15 +119,17 @@ export class OptionsController {
   getOptionsPaginated = async (req: TypedRequest<Pagination>, res: Response) => {
     const { page, rowsPerPage, sortBy, descending } = req.query;
 
+    const pagination = getPagination(Number(page), Number(rowsPerPage))
+
     const pagedOptions = await Options.findAndCountAll({
       include,
-      ...getPagination(Number(page), Number(rowsPerPage)),
+      ...pagination,
       ...getOrder(sortBy?.toString() || 'id', descending === 'true')
     });
 
     res.json({
       page: Number(page),
-      rowsPerPage: Number(rowsPerPage),
+      rowsPerPage: pagination.limit,
       rowsNumber: pagedOptions.count,
       rows: pagedOptions.rows,
       sortBy: sortBy?.toString() || 'id',

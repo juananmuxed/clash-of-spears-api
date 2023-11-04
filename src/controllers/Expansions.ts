@@ -51,15 +51,17 @@ export class ExpansionsController {
   getExpansionsPaginated = async (req: TypedRequest<Pagination>, res: Response) => {
     const { page, rowsPerPage, sortBy, descending } = req.query;
 
+    const pagination = getPagination(Number(page), Number(rowsPerPage))
+
     const pagedExpansions = await Expansions.findAndCountAll({
       include,
-      ...getPagination(Number(page), Number(rowsPerPage)),
+      ...pagination,
       ...getOrder(sortBy?.toString() || 'id', descending === 'true')
     });
 
     res.json({
       page: Number(page),
-      rowsPerPage: Number(rowsPerPage),
+      rowsPerPage: pagination.limit,
       rowsNumber: pagedExpansions.count,
       rows: pagedExpansions.rows,
       sortBy: sortBy?.toString() || 'id',
