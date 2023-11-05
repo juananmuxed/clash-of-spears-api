@@ -4,7 +4,7 @@ import { InternalError, NotFoundError } from "../models/Errors";
 import { ERRORS } from "../config/data/Errors";
 import { TypedRequest } from "../db/models/common/ExpressTypes";
 import { Armies } from "../db/models/Armies";
-import { ValidationError } from "sequelize";
+import { OrderItem, ValidationError } from "sequelize";
 import { Weapons } from "../db/models/Weapons";
 import { Traits } from "../db/models/Traits";
 import { Armors } from "../db/models/Armors";
@@ -39,34 +39,45 @@ const include = [
 
 export class ExpansionsController {
 
-  getExpansions = async (_req: Request, res: Response) => {
-    const expansions = await Expansions.findAll({
-      where: {active: true},
-      include
-    });
+  getExpansions = async (_req: Request, res: Response, next: NextFunction) => {
+    try {
+      const expansions = await Expansions.findAll({
+        where: {active: true},
+        include
+      });
 
-    res.json(expansions)
+      res.json(expansions)
+    } catch (error) {
+      next(new InternalError(undefined, error as ValidationError))
+    }
   }
 
-  getExpansionsPaginated = async (req: TypedRequest<Pagination>, res: Response) => {
+  getExpansionsPaginated = async (req: TypedRequest<Pagination>, res: Response, next: NextFunction) => {
     const { page, rowsPerPage, sortBy, descending } = req.query;
 
-    const pagination = getPagination(Number(page), Number(rowsPerPage))
+    try {
+      const pagination = getPagination(Number(page), Number(rowsPerPage))
+      const order = getOrder(sortBy?.toString(), descending?.toString());
 
-    const pagedExpansions = await Expansions.findAndCountAll({
-      include,
-      ...pagination,
-      ...getOrder(sortBy?.toString() || 'id', descending === 'true')
-    });
+      const pagedExpansions = await Expansions.findAndCountAll({
+        include,
+        ...pagination,
+        order: [
+          [ order.sortBy, order.descending ] as OrderItem
+        ]
+      });
 
-    res.json({
-      page: Number(page),
-      rowsPerPage: pagination.limit,
-      rowsNumber: pagedExpansions.count,
-      rows: pagedExpansions.rows,
-      sortBy: sortBy?.toString() || 'id',
-      descending: descending === 'true',
-    })
+      res.json({
+        page: pagination.page,
+        rowsPerPage: pagination.limit,
+        rowsNumber: pagedExpansions.count,
+        rows: pagedExpansions.rows,
+        sortBy: order.sortBy,
+        descending: order.descending === 'DESC',
+      })
+    } catch (error) {
+      next(new InternalError(undefined, error as ValidationError))
+    }
   }
 
   getExpansion = async (req: Request, res: Response, next: NextFunction) => {

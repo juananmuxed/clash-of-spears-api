@@ -6,7 +6,7 @@ import { Weapons } from "../db/models/Weapons";
 import { Traits } from "../db/models/Traits";
 import { TypedRequest } from "../db/models/common/ExpressTypes";
 import { InternalError, NotFoundError } from "../models/Errors";
-import { ValidationError } from "sequelize";
+import { OrderItem, ValidationError } from "sequelize";
 import { ERRORS } from "../config/data/Errors";
 import { getPagination, getOrder } from './utils/Pagination';
 import { Pagination } from "../models/Pagination";
@@ -108,33 +108,44 @@ export class OptionsController {
     return Options.findByPk(id, { include });
   }
 
-  getOptions = async (_req: Request, res: Response) => {
-    const options = await Options.findAll({
-      include
-    });
+  getOptions = async (_req: Request, res: Response, next: NextFunction) => {
+    try {
+      const options = await Options.findAll({
+        include
+      });
 
-    res.json(options);
+      res.json(options);
+    } catch (error) {
+      next(new InternalError(undefined, error as ValidationError))
+    }
   }
 
-  getOptionsPaginated = async (req: TypedRequest<Pagination>, res: Response) => {
+  getOptionsPaginated = async (req: TypedRequest<Pagination>, res: Response, next: NextFunction) => {
     const { page, rowsPerPage, sortBy, descending } = req.query;
 
-    const pagination = getPagination(Number(page), Number(rowsPerPage))
+    try {
+      const pagination = getPagination(Number(page), Number(rowsPerPage))
+      const order = getOrder(sortBy?.toString(), descending?.toString());
 
-    const pagedOptions = await Options.findAndCountAll({
-      include,
-      ...pagination,
-      ...getOrder(sortBy?.toString() || 'id', descending === 'true')
-    });
+      const pagedOptions = await Options.findAndCountAll({
+        include,
+        ...pagination,
+        order: [
+          [ order.sortBy, order.descending ] as OrderItem
+        ]
+      });
 
-    res.json({
-      page: Number(page),
-      rowsPerPage: pagination.limit,
-      rowsNumber: pagedOptions.count,
-      rows: pagedOptions.rows,
-      sortBy: sortBy?.toString() || 'id',
-      descending: descending === 'true',
-    })
+      res.json({
+        page: pagination.page,
+        rowsPerPage: pagination.limit,
+        rowsNumber: pagedOptions.count,
+        rows: pagedOptions.rows,
+        sortBy: order.sortBy,
+        descending: order.descending === 'DESC',
+      })
+    } catch (error) {
+      next(new InternalError(undefined, error as ValidationError))
+    }
   }
 
   createOption = async (req: TypedRequest<OptionItem>, res: Response, next: NextFunction) => {

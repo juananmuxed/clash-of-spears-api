@@ -3,7 +3,7 @@ import { WeaponItem, Weapons, WeaponTypes } from "../db/models/Weapons";
 import { InternalError, NotFoundError } from "../models/Errors";
 import { ERRORS } from "../config/data/Errors";
 import { TypedRequest } from "../db/models/common/ExpressTypes";
-import { ValidationError } from "sequelize";
+import { OrderItem, ValidationError } from "sequelize";
 import { Expansions } from "../db/models/Expansions";
 import { getPagination, getOrder } from './utils/Pagination';
 import { Pagination } from "../models/Pagination";
@@ -35,33 +35,44 @@ export class WeaponsController {
     });
   }
 
-  getWeapons = async (_req: Request, res: Response) => {
-    const weapons = await Weapons.findAll({
-      include
-    });
+  getWeapons = async (_req: Request, res: Response, next: NextFunction) => {
+    try {
+      const weapons = await Weapons.findAll({
+        include
+      });
 
-    res.json(weapons)
+      res.json(weapons)
+    } catch (error) {
+      next(new InternalError(undefined, error as ValidationError))
+    }
   }
 
-  getWeaponsPaginated = async (req: TypedRequest<Pagination>, res: Response) => {
+  getWeaponsPaginated = async (req: TypedRequest<Pagination>, res: Response, next: NextFunction) => {
     const { page, rowsPerPage, sortBy, descending } = req.query;
 
-    const pagination = getPagination(Number(page), Number(rowsPerPage))
+    try {
+      const pagination = getPagination(Number(page), Number(rowsPerPage));
+      const order = getOrder(sortBy?.toString(), descending?.toString());
 
-    const pagedWeapons = await Weapons.findAndCountAll({
-      include,
-      ...pagination,
-      ...getOrder(sortBy?.toString() || 'id', descending === 'true')
-    });
+      const pagedWeapons = await Weapons.findAndCountAll({
+        include,
+        ...pagination,
+        order: [
+          [ order.sortBy, order.descending ] as OrderItem
+        ]
+      });
 
-    res.json({
-      page: Number(page),
-      rowsPerPage: pagination.limit,
-      rowsNumber: pagedWeapons.count,
-      rows: pagedWeapons.rows,
-      sortBy: sortBy?.toString() || 'id',
-      descending: descending === 'true',
-    })
+      res.json({
+        page: pagination.page,
+        rowsPerPage: pagination.limit,
+        rowsNumber: pagedWeapons.count,
+        rows: pagedWeapons.rows,
+        sortBy: order.sortBy,
+        descending: order.descending === 'DESC',
+      })
+    } catch (error) {
+      next(new InternalError(undefined, error as ValidationError))
+    }
   }
 
   createWeapon = async (req: TypedRequest<WeaponItem>, res: Response, next: NextFunction) => {

@@ -3,7 +3,7 @@ import { ArmorItem, Armors } from "../db/models/Armors";
 import { InternalError, NotFoundError } from "../models/Errors";
 import { ERRORS } from "../config/data/Errors";
 import { TypedRequest } from "../db/models/common/ExpressTypes";
-import { ValidationError } from "sequelize";
+import { OrderItem, ValidationError } from "sequelize";
 import { Expansions } from "../db/models/Expansions";
 import { getPagination, getOrder } from './utils/Pagination';
 import { Pagination } from "../models/Pagination";
@@ -27,33 +27,44 @@ export class ArmorsController {
     });
   }
 
-  getArmors = async (_req: Request, res: Response) => {
-    const armors = await Armors.findAll({
-      include
-    });
+  getArmors = async (_req: Request, res: Response, next: NextFunction) => {
+    try {
+      const armors = await Armors.findAll({
+        include
+      });
 
-    res.json(armors)
+      res.json(armors)
+    } catch (error) {
+      next(new InternalError(undefined, error as ValidationError))
+    }
   }
 
-  getArmorsPaginated = async (req: TypedRequest<Pagination>, res: Response) => {
+  getArmorsPaginated = async (req: TypedRequest<Pagination>, res: Response, next: NextFunction) => {
     const { page, rowsPerPage, sortBy, descending } = req.query;
 
-    const pagination = getPagination(Number(page), Number(rowsPerPage))
+    try {
+      const pagination = getPagination(Number(page), Number(rowsPerPage))
+      const order = getOrder(sortBy?.toString(), descending?.toString());
 
-    const pagedArmors = await Armors.findAndCountAll({
-      include,
-      ...pagination,
-      ...getOrder(sortBy?.toString() || 'id', descending === 'true')
-    });
+      const pagedArmors = await Armors.findAndCountAll({
+        include,
+        ...pagination,
+        order: [
+          [ order.sortBy, order.descending ] as OrderItem
+        ]
+      });
 
-    res.json({
-      page: Number(page),
-      rowsPerPage: pagination.limit,
-      rowsNumber: pagedArmors.count,
-      rows: pagedArmors.rows,
-      sortBy: sortBy?.toString() || 'id',
-      descending: descending === 'true',
-    })
+      res.json({
+        page: pagination.page,
+        rowsPerPage: pagination.limit,
+        rowsNumber: pagedArmors.count,
+        rows: pagedArmors.rows,
+        sortBy: order.sortBy,
+        descending: order.descending === 'DESC',
+      })
+    } catch (error) {
+      next(new InternalError(undefined, error as ValidationError))
+    }
   }
 
   createArmor = async (req: TypedRequest<ArmorItem>, res: Response, next: NextFunction) => {
