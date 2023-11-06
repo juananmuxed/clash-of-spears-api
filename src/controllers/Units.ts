@@ -3,14 +3,14 @@ import { Armies } from "../db/models/Armies";
 import { Armors } from "../db/models/Armors";
 import { Options } from "../db/models/Options";
 import { Traits } from "../db/models/Traits";
-import { UnitItem, UnitTypes, Units } from "../db/models/Units";
+import { UnitItem, UnitModel, UnitTypes, Units } from "../db/models/Units";
 import { Weapons } from "../db/models/Weapons";
 import { TypedRequest } from "../db/models/common/ExpressTypes";
 import { InternalError, NotFoundError } from "../models/Errors";
-import { OrderItem, ValidationError } from "sequelize";
+import { ValidationError } from "sequelize";
 import { ERRORS } from "../config/data/Errors";
 import { includeOptions } from "./Options";
-import { getPagination, getOrder } from './utils/Pagination';
+import { getPagination, getOrder, pagedResponse } from './utils/Pagination';
 import { Pagination } from "../models/Pagination";
 
 const include = [
@@ -96,19 +96,10 @@ export class UnitsController {
       const pagedUnits = await Units.findAndCountAll({
         include,
         ...pagination,
-        order: [
-          [ order.sortBy, order.descending ] as OrderItem
-        ]
+        order
       });
 
-      res.json({
-        page: pagination.page,
-        rowsPerPage: pagination.limit,
-        rowsNumber: pagedUnits.count,
-        rows: pagedUnits.rows,
-        sortBy: order.sortBy,
-        descending: order.descending === 'DESC',
-      })
+      res.json(pagedResponse<UnitModel>(pagedUnits, pagination, order))
     } catch (error) {
       next(new InternalError(undefined, error as ValidationError))
     }

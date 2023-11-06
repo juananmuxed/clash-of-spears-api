@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import { ArmorItem, Armors } from "../db/models/Armors";
+import { ArmorItem, ArmorModel, Armors } from "../db/models/Armors";
 import { InternalError, NotFoundError } from "../models/Errors";
 import { ERRORS } from "../config/data/Errors";
 import { TypedRequest } from "../db/models/common/ExpressTypes";
-import { OrderItem, ValidationError } from "sequelize";
+import { ValidationError } from "sequelize";
 import { Expansions } from "../db/models/Expansions";
-import { getPagination, getOrder } from './utils/Pagination';
+import { getPagination, getOrder, pagedResponse } from './utils/Pagination';
 import { Pagination } from "../models/Pagination";
 
 const include = [
@@ -49,19 +49,10 @@ export class ArmorsController {
       const pagedArmors = await Armors.findAndCountAll({
         include,
         ...pagination,
-        order: [
-          [ order.sortBy, order.descending ] as OrderItem
-        ]
+        order
       });
 
-      res.json({
-        page: pagination.page,
-        rowsPerPage: pagination.limit,
-        rowsNumber: pagedArmors.count,
-        rows: pagedArmors.rows,
-        sortBy: order.sortBy,
-        descending: order.descending === 'DESC',
-      })
+      res.json(pagedResponse<ArmorModel>(pagedArmors, pagination, order))
     } catch (error) {
       next(new InternalError(undefined, error as ValidationError))
     }

@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import { UserItem, Users } from "../db/models/Users";
+import { UserItem, UserModel, Users } from "../db/models/Users";
 import { InternalError, NotFoundError } from "../models/Errors";
 import { ERRORS } from "../config/data/Errors";
 import { TypedRequest } from "../db/models/common/ExpressTypes";
-import { OrderItem, ValidationError } from "sequelize";
+import { ValidationError } from "sequelize";
 import { Roles } from "../db/models/Roles";
-import { getPagination, getOrder } from './utils/Pagination';
+import { getPagination, getOrder, pagedResponse } from './utils/Pagination';
 import { Pagination } from "../models/Pagination";
 
 const include = {
@@ -37,19 +37,10 @@ export class UsersController {
       const pagedUsers = await Users.findAndCountAll({
         include,
         ...pagination,
-        order: [
-          [ order.sortBy, order.descending ] as OrderItem
-        ]
+        order
       });
 
-      res.json({
-        page: pagination.page,
-        rowsPerPage: pagination.limit,
-        rowsNumber: pagedUsers.count,
-        rows: pagedUsers.rows,
-        sortBy: order.sortBy,
-        descending: order.descending === 'DESC',
-      })
+      res.json(pagedResponse<UserModel>(pagedUsers, pagination, order))
     } catch (error) {
       next(new InternalError(undefined, error as ValidationError))
     }

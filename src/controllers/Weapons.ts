@@ -3,10 +3,11 @@ import { WeaponItem, Weapons, WeaponTypes } from "../db/models/Weapons";
 import { InternalError, NotFoundError } from "../models/Errors";
 import { ERRORS } from "../config/data/Errors";
 import { TypedRequest } from "../db/models/common/ExpressTypes";
-import { OrderItem, ValidationError } from "sequelize";
+import { ValidationError } from "sequelize";
 import { Expansions } from "../db/models/Expansions";
-import { getPagination, getOrder } from './utils/Pagination';
+import { getPagination, getOrder, pagedResponse } from './utils/Pagination';
 import { Pagination } from "../models/Pagination";
+import { WeaponModel } from './../db/models/Weapons';
 
 const include = [
   {
@@ -57,19 +58,10 @@ export class WeaponsController {
       const pagedWeapons = await Weapons.findAndCountAll({
         include,
         ...pagination,
-        order: [
-          [ order.sortBy, order.descending ] as OrderItem
-        ]
+        order
       });
 
-      res.json({
-        page: pagination.page,
-        rowsPerPage: pagination.limit,
-        rowsNumber: pagedWeapons.count,
-        rows: pagedWeapons.rows,
-        sortBy: order.sortBy,
-        descending: order.descending === 'DESC',
-      })
+      res.json(pagedResponse<WeaponModel>(pagedWeapons, pagination, order))
     } catch (error) {
       next(new InternalError(undefined, error as ValidationError))
     }

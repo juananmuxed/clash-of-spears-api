@@ -1,14 +1,14 @@
 import { NextFunction, Request, Response } from "express";
-import { OptionItem, Options } from "../db/models/Options";
+import { OptionItem, OptionModel, Options } from "../db/models/Options";
 import { Armies } from "../db/models/Armies";
 import { Armors } from "../db/models/Armors";
 import { Weapons } from "../db/models/Weapons";
 import { Traits } from "../db/models/Traits";
 import { TypedRequest } from "../db/models/common/ExpressTypes";
 import { InternalError, NotFoundError } from "../models/Errors";
-import { OrderItem, ValidationError } from "sequelize";
+import { ValidationError } from "sequelize";
 import { ERRORS } from "../config/data/Errors";
-import { getPagination, getOrder } from './utils/Pagination';
+import { getPagination, getOrder, pagedResponse } from './utils/Pagination';
 import { Pagination } from "../models/Pagination";
 
 const include = [
@@ -130,19 +130,10 @@ export class OptionsController {
       const pagedOptions = await Options.findAndCountAll({
         include,
         ...pagination,
-        order: [
-          [ order.sortBy, order.descending ] as OrderItem
-        ]
+        order
       });
 
-      res.json({
-        page: pagination.page,
-        rowsPerPage: pagination.limit,
-        rowsNumber: pagedOptions.count,
-        rows: pagedOptions.rows,
-        sortBy: order.sortBy,
-        descending: order.descending === 'DESC',
-      })
+      res.json(pagedResponse<OptionModel>(pagedOptions, pagination, order))
     } catch (error) {
       next(new InternalError(undefined, error as ValidationError))
     }

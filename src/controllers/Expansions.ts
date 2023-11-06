@@ -1,14 +1,14 @@
 import { NextFunction, Request, Response } from "express";
-import { ExpansionItem, Expansions } from "../db/models/Expansions";
+import { ExpansionItem, ExpansionModel, Expansions } from "../db/models/Expansions";
 import { InternalError, NotFoundError } from "../models/Errors";
 import { ERRORS } from "../config/data/Errors";
 import { TypedRequest } from "../db/models/common/ExpressTypes";
 import { Armies } from "../db/models/Armies";
-import { OrderItem, ValidationError } from "sequelize";
+import { ValidationError } from "sequelize";
 import { Weapons } from "../db/models/Weapons";
 import { Traits } from "../db/models/Traits";
 import { Armors } from "../db/models/Armors";
-import { getPagination, getOrder } from './utils/Pagination';
+import { getPagination, getOrder, pagedResponse } from './utils/Pagination';
 import { Pagination } from "../models/Pagination";
 
 const include = [
@@ -62,19 +62,10 @@ export class ExpansionsController {
       const pagedExpansions = await Expansions.findAndCountAll({
         include,
         ...pagination,
-        order: [
-          [ order.sortBy, order.descending ] as OrderItem
-        ]
+        order
       });
 
-      res.json({
-        page: pagination.page,
-        rowsPerPage: pagination.limit,
-        rowsNumber: pagedExpansions.count,
-        rows: pagedExpansions.rows,
-        sortBy: order.sortBy,
-        descending: order.descending === 'DESC',
-      })
+      res.json(pagedResponse<ExpansionModel>(pagedExpansions, pagination, order))
     } catch (error) {
       next(new InternalError(undefined, error as ValidationError))
     }

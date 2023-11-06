@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from "express";
-import { RoleItem, Roles } from "../db/models/Roles";
+import { RoleItem, RoleModel, Roles } from "../db/models/Roles";
 import { InternalError, NotFoundError } from "../models/Errors";
 import { ERRORS } from "../config/data/Errors";
 import { TypedRequest } from "../db/models/common/ExpressTypes";
-import { OrderItem, ValidationError } from "sequelize";
-import { getPagination, getOrder } from './utils/Pagination';
+import { ValidationError } from "sequelize";
+import { getPagination, getOrder, pagedResponse } from './utils/Pagination';
 import { Pagination } from "../models/Pagination";
 
 export class RolesController {
@@ -28,19 +28,10 @@ export class RolesController {
 
       const pagedRoles = await Roles.findAndCountAll({
         ...pagination,
-        order: [
-          [ order.sortBy, order.descending ] as OrderItem
-        ]
+        order
       });
 
-      res.json({
-        page: pagination.page,
-        rowsPerPage: pagination.limit,
-        rowsNumber: pagedRoles.count,
-        rows: pagedRoles.rows,
-        sortBy: order.sortBy,
-        descending: order.descending === 'DESC',
-      })
+      res.json(pagedResponse<RoleModel>(pagedRoles, pagination, order))
     } catch (error) {
       next(new InternalError(undefined, error as ValidationError))
     }
