@@ -17,8 +17,8 @@ export const syncDatabase = async () => {
   await Weapons.sync();
   await Armors.sync();
   await Options.sync();
-  await Units.sync();
   await UnitTypes.sync();
+  await Units.sync();
   await WeaponTypes.sync();
   await WeaponsWeaponTypes.sync();
   await UnitsArmies.sync();
