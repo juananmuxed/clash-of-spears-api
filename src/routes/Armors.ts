@@ -7,13 +7,12 @@ const router = Router();
 const armors = new ArmorsController();
 const auth = new AuthenticationController();
 
-//TODO: block with auth & role
 router.route('/')
-  .get(armors.getArmors)
-  .post( armors.createArmor)
-  .put( armors.updateArmor)
+  .get([auth.authJWT, auth.checkRole(['editor', 'admin'])], armors.getArmors)
+  .post([auth.authJWT, auth.checkRole(['editor', 'admin'])], armors.createArmor)
+  .put([auth.authJWT, auth.checkRole(['editor', 'admin'])], armors.updateArmor)
   .delete([auth.authJWT, auth.checkRole(['editor', 'admin'])], armors.deleteArmor);
 
-router.get('/admin', armors.getArmorsPaginated);
+router.get('/admin', [auth.authJWT, auth.checkRole(['editor', 'admin'])], armors.getArmorsPaginated);
 
 export default router;

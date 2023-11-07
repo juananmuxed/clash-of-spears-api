@@ -7,13 +7,12 @@ const router = Router();
 const units = new UnitsController();
 const auth = new AuthenticationController();
 
-//TODO: block with auth & role
 router.route('/')
-  .get(units.getUnits)
-  .post( units.createUnit)
-  .put( units.updateUnit)
+  .get([auth.authJWT, auth.checkRole(['editor', 'admin'])],units.getUnits)
+  .post([auth.authJWT, auth.checkRole(['editor', 'admin'])], units.createUnit)
+  .put([auth.authJWT, auth.checkRole(['editor', 'admin'])], units.updateUnit)
   .delete([auth.authJWT, auth.checkRole(['editor', 'admin'])], units.deleteUnit);
 
-router.get('/admin', units.getUnitsPaginated);
+router.get('/admin', [auth.authJWT, auth.checkRole(['editor', 'admin'])], units.getUnitsPaginated);
 
 export default router;

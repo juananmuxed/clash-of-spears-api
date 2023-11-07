@@ -7,13 +7,12 @@ const router = Router();
 const options = new OptionsController();
 const auth = new AuthenticationController();
 
-//TODO: block with auth & role
 router.route('/')
-  .get(options.getOptions)
-  .post( options.createOption)
-  .put( options.updateOption)
+  .get([auth.authJWT, auth.checkRole(['editor', 'admin'])], options.getOptions)
+  .post([auth.authJWT, auth.checkRole(['editor', 'admin'])], options.createOption)
+  .put([auth.authJWT, auth.checkRole(['editor', 'admin'])], options.updateOption)
   .delete([auth.authJWT, auth.checkRole(['editor', 'admin'])], options.deleteOption);
 
-router.get('/admin', options.getOptionsPaginated);
+router.get('/admin', [auth.authJWT, auth.checkRole(['editor', 'admin'])], options.getOptionsPaginated);
 
 export default router;

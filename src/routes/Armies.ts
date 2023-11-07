@@ -7,15 +7,14 @@ const router = Router();
 const armies = new ArmiesController();
 const auth = new AuthenticationController();
 
-//TODO: block with auth & role
 router.route('/')
-  .get(armies.getArmies)
-  .post( armies.createArmy)
-  .put( armies.updateArmy)
+  .get([auth.authJWT, auth.checkRole(['editor', 'admin'])], armies.getArmies)
+  .post([auth.authJWT, auth.checkRole(['editor', 'admin'])], armies.createArmy)
+  .put([auth.authJWT, auth.checkRole(['editor', 'admin'])], armies.updateArmy)
   .delete([auth.authJWT, auth.checkRole(['editor', 'admin'])], armies.deleteArmy);
 
-router.get('/admin', armies.getArmiesPaginated)
+router.get('/admin', [auth.authJWT, auth.checkRole(['editor', 'admin'])], armies.getArmiesPaginated);
 
-router.get('/all', [auth.authJWT, auth.checkRole(['editor', 'admin'])], armies.getAllArmies)
+router.get('/all', [auth.authJWT, auth.checkRole(['editor', 'admin'])], armies.getAllArmies);
 
 export default router;
