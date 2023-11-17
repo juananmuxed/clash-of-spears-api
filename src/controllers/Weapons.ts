@@ -48,6 +48,16 @@ export class WeaponsController {
     }
   }
 
+  getWeaponTypes = async (_req: Request, res: Response, next: NextFunction) => {
+    try {
+      const weaponTypes = await WeaponTypes.findAll();
+
+      res.json(weaponTypes)
+    } catch (error) {
+      next(new InternalError(undefined, error as ValidationError))
+    }
+  }
+
   getWeaponsPaginated = async (req: TypedRequest<Pagination>, res: Response, next: NextFunction) => {
     const { page, rowsPerPage, sortBy, descending } = req.query;
 

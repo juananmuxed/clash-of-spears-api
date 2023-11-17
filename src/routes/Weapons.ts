@@ -13,6 +13,8 @@ router.route('/')
   .put([auth.authJWT, auth.checkRole(['editor', 'admin'])], weapons.updateWeapon)
   .delete([auth.authJWT, auth.checkRole(['editor', 'admin'])], weapons.deleteWeapon);
 
-router.get('/admin',[auth.authJWT, auth.checkRole(['editor', 'admin'])], weapons.getWeaponsPaginated);
+router.get('/admin', [auth.authJWT, auth.checkRole(['editor', 'admin'])], weapons.getWeaponsPaginated);
+
+router.get('/types', [auth.authJWT, auth.checkRole(['editor', 'admin'])], weapons.getWeaponTypes)
 
 export default router;
