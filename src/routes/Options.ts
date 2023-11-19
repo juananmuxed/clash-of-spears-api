@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { AuthenticationController } from "../controllers/Authentication";
 import { OptionsController } from "../controllers/Options";
+import { uploader } from "../middlewares/Upload";
 
 const router = Router();
 
@@ -14,5 +15,7 @@ router.route('/')
   .delete([auth.authJWT, auth.checkRole(['editor', 'admin'])], options.deleteOption);
 
 router.get('/admin', [auth.authJWT, auth.checkRole(['editor', 'admin'])], options.getOptionsPaginated);
+
+router.post('/bulk', [auth.authJWT, auth.checkRole(['editor', 'admin']), uploader.single('file')], options.bulkCreateOptions);
 
 export default router;

@@ -5,7 +5,7 @@ import { ArmorModel, Armors } from "./Armors";
 import { WeaponModel, Weapons } from "./Weapons";
 import { TraitModel, Traits } from "./Traits";
 
-export interface OptionItem {
+export interface OptionItem extends Record<string, unknown> {
   id: number;
   name: string;
   cost: number;

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { WeaponItem, Weapons, WeaponTypes } from "../db/models/Weapons";
-import { InternalError, NotFoundError } from "../models/Errors";
+import { InternalError, NotFileError, NotFoundError } from "../models/Errors";
 import { ERRORS } from "../config/data/Errors";
 import { TypedRequest } from "../db/models/common/ExpressTypes";
 import { ValidationError } from "sequelize";
@@ -8,6 +8,8 @@ import { Expansions } from "../db/models/Expansions";
 import { getPagination, getOrder, pagedResponse } from './utils/Pagination';
 import { Pagination } from "../models/Pagination";
 import { WeaponModel } from './../db/models/Weapons';
+import { MIME_TYPES } from "../config/data/MimeTypes";
+import { convertCsv } from "./utils/ConvertCsv";
 
 const include = [
   {
@@ -87,6 +89,28 @@ export class WeaponsController {
       res.status(201).json(await this.getWeaponById(newWeapon.id))
     } catch (error) {
       next(new InternalError(undefined, error as ValidationError))
+    }
+  }
+
+  bulkCreateWeapons = async (req: Request, res: Response, next: NextFunction) => {
+    const { file } = req;
+
+    try {
+      if(!file) {
+        return next(new NotFileError());
+      }
+
+      if(!MIME_TYPES.CSV.includes(file.mimetype)) {
+        return next(new NotFileError(ERRORS.NOT_SUPPORTED_FILE));
+      }
+
+      const dataFromCSV = convertCsv<WeaponItem>(file);
+
+      const weapons = await Weapons.bulkCreate(dataFromCSV);
+
+      res.status(201).json(weapons);
+    } catch (error) {
+      next(new InternalError(undefined, error as ValidationError));
     }
   }
 

@@ -1,12 +1,14 @@
 import { NextFunction, Request, Response } from "express";
 import { Armies, ArmyItem, ArmyModel } from "../db/models/Armies";
 import { TypedRequest } from "../db/models/common/ExpressTypes";
-import { InternalError, NotFoundError } from "../models/Errors";
+import { InternalError, NotFileError, NotFoundError } from "../models/Errors";
 import { ERRORS } from "../config/data/Errors";
 import { ValidationError } from "sequelize";
 import { Expansions } from "../db/models/Expansions";
 import { getPagination, getOrder, pagedResponse } from './utils/Pagination';
 import { Pagination } from "../models/Pagination";
+import { MIME_TYPES } from "../config/data/MimeTypes";
+import { convertCsv } from "./utils/ConvertCsv";
 
 const include = {
   model: Expansions,
@@ -61,6 +63,28 @@ export class ArmiesController {
       res.status(201).json(newArmy)
     } catch (error) {
       next(new InternalError(undefined, error as ValidationError))
+    }
+  }
+
+  bulkCreateArmies = async (req: Request, res: Response, next: NextFunction) => {
+    const { file } = req;
+
+    try {
+      if(!file) {
+        return next(new NotFileError());
+      }
+
+      if(!MIME_TYPES.CSV.includes(file.mimetype)) {
+        return next(new NotFileError(ERRORS.NOT_SUPPORTED_FILE));
+      }
+
+      const dataFromCSV = convertCsv<ArmyItem>(file);
+
+      const armies = await Armies.bulkCreate(dataFromCSV);
+
+      res.status(201).json(armies);
+    } catch (error) {
+      next(new InternalError(undefined, error as ValidationError));
     }
   }
 

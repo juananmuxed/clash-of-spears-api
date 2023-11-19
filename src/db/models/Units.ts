@@ -11,7 +11,7 @@ export interface UnitTypeItem {
   name: string;
 }
 
-export interface UnitItem {
+export interface UnitItem extends Record<string, unknown> {
   id: number;
   name: string;
   unitType: number;

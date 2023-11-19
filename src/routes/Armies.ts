@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { AuthenticationController } from "../controllers/Authentication";
 import { ArmiesController } from '../controllers/Armies';
+import { uploader } from "../middlewares/Upload";
 
 const router = Router();
 
@@ -16,5 +17,7 @@ router.route('/')
 router.get('/admin', [auth.authJWT, auth.checkRole(['editor', 'admin'])], armies.getArmiesPaginated);
 
 router.get('/all', [auth.authJWT, auth.checkRole(['editor', 'admin'])], armies.getAllArmies);
+
+router.post('/bulk', [auth.authJWT, auth.checkRole(['editor', 'admin']), uploader.single('file')], armies.bulkCreateArmies);
 
 export default router;

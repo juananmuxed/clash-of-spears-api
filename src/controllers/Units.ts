@@ -6,12 +6,14 @@ import { Traits } from "../db/models/Traits";
 import { UnitItem, UnitModel, UnitTypes, Units } from "../db/models/Units";
 import { Weapons } from "../db/models/Weapons";
 import { TypedRequest } from "../db/models/common/ExpressTypes";
-import { InternalError, NotFoundError } from "../models/Errors";
+import { InternalError, NotFileError, NotFoundError } from "../models/Errors";
 import { ValidationError } from "sequelize";
 import { ERRORS } from "../config/data/Errors";
 import { includeOptions } from "./Options";
 import { getPagination, getOrder, pagedResponse } from './utils/Pagination';
 import { Pagination } from "../models/Pagination";
+import { MIME_TYPES } from "../config/data/MimeTypes";
+import { convertCsv } from "./utils/ConvertCsv";
 
 const include = [
   {
@@ -118,6 +120,28 @@ export class UnitsController {
       res.status(201).json(await this.getUnitById(newUnit.id))
     } catch (error) {
       next(new InternalError(undefined, error as ValidationError))
+    }
+  }
+
+  bulkCreateUnits = async (req: Request, res: Response, next: NextFunction) => {
+    const { file } = req;
+
+    try {
+      if(!file) {
+        return next(new NotFileError());
+      }
+
+      if(!MIME_TYPES.CSV.includes(file.mimetype)) {
+        return next(new NotFileError(ERRORS.NOT_SUPPORTED_FILE));
+      }
+
+      const dataFromCSV = convertCsv<UnitItem>(file);
+
+      const units = await Units.bulkCreate(dataFromCSV);
+
+      res.status(201).json(units);
+    } catch (error) {
+      next(new InternalError(undefined, error as ValidationError));
     }
   }
 

@@ -2,7 +2,7 @@
 import { DataTypes, InferAttributes, InferCreationAttributes, Model } from "sequelize";
 import { db } from "../Connection";
 
-export interface ArmorItem {
+export interface ArmorItem extends Record<string, unknown> {
   id: number;
   name: string;
   value?: number;

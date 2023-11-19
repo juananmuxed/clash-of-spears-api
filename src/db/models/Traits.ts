@@ -2,7 +2,7 @@
 import { DataTypes, InferAttributes, InferCreationAttributes, Model } from "sequelize";
 import { db } from "../Connection";
 
-export interface TraitItem {
+export interface TraitItem extends Record<string, unknown> {
   id: number;
   name: string;
   requires?: boolean;

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { ExpansionItem, ExpansionModel, Expansions } from "../db/models/Expansions";
-import { InternalError, NotFoundError } from "../models/Errors";
+import { InternalError, NotFileError, NotFoundError } from "../models/Errors";
 import { ERRORS } from "../config/data/Errors";
 import { TypedRequest } from "../db/models/common/ExpressTypes";
 import { Armies } from "../db/models/Armies";
@@ -10,6 +10,8 @@ import { Traits } from "../db/models/Traits";
 import { Armors } from "../db/models/Armors";
 import { getPagination, getOrder, pagedResponse } from './utils/Pagination';
 import { Pagination } from "../models/Pagination";
+import { MIME_TYPES } from "../config/data/MimeTypes";
+import { convertCsv } from "./utils/ConvertCsv";
 
 const include = [
   {
@@ -97,6 +99,28 @@ export class ExpansionsController {
       res.status(201).json(newExpansion)
     } catch (error) {
       next(new InternalError(undefined, error as ValidationError))
+    }
+  }
+
+  bulkCreateExpansions = async (req: Request, res: Response, next: NextFunction) => {
+    const { file } = req;
+
+    try {
+      if(!file) {
+        return next(new NotFileError());
+      }
+
+      if(!MIME_TYPES.CSV.includes(file.mimetype)) {
+        return next(new NotFileError(ERRORS.NOT_SUPPORTED_FILE));
+      }
+
+      const dataFromCSV = convertCsv<ExpansionItem>(file);
+
+      const expansions = await Expansions.bulkCreate(dataFromCSV);
+
+      res.status(201).json(expansions);
+    } catch (error) {
+      next(new InternalError(undefined, error as ValidationError));
     }
   }
 

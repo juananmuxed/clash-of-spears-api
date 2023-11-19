@@ -10,7 +10,7 @@ import { Weapons } from "./Weapons";
 import { Armors } from "./Armors";
 import { Traits } from "./Traits";
 
-export interface ExpansionItem {
+export interface ExpansionItem extends Record<string, unknown> {
   id: number;
   name: string;
   active: boolean;

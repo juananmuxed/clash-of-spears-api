@@ -1,12 +1,14 @@
 import { NextFunction, Request, Response } from "express";
 import { TraitItem, TraitModel, Traits } from "../db/models/Traits";
-import { InternalError, NotFoundError } from "../models/Errors";
+import { InternalError, NotFileError, NotFoundError } from "../models/Errors";
 import { ERRORS } from "../config/data/Errors";
 import { TypedRequest } from "../db/models/common/ExpressTypes";
-import { OrderItem, ValidationError } from "sequelize";
+import { ValidationError } from "sequelize";
 import { Expansions } from "../db/models/Expansions";
 import { getPagination, getOrder, pagedResponse } from './utils/Pagination';
 import { Pagination } from "../models/Pagination";
+import { MIME_TYPES } from "../config/data/MimeTypes";
+import { convertCsv } from "./utils/ConvertCsv";
 
 const include = [
   {
@@ -67,6 +69,28 @@ export class TraitsController {
       res.status(201).json(await this.getTraitById(newTrait.id))
     } catch (error) {
       next(new InternalError(undefined, error as ValidationError))
+    }
+  }
+
+  bulkCreateTraits = async (req: Request, res: Response, next: NextFunction) => {
+    const { file } = req;
+
+    try {
+      if(!file) {
+        return next(new NotFileError());
+      }
+
+      if(!MIME_TYPES.CSV.includes(file.mimetype)) {
+        return next(new NotFileError(ERRORS.NOT_SUPPORTED_FILE));
+      }
+
+      const dataFromCSV = convertCsv<TraitItem>(file);
+
+      const traits = await Traits.bulkCreate(dataFromCSV);
+
+      res.status(201).json(traits);
+    } catch (error) {
+      next(new InternalError(undefined, error as ValidationError));
     }
   }
 

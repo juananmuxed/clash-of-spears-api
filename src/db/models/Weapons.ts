@@ -2,7 +2,7 @@
 import { DataTypes, HasManyAddAssociationsMixin, HasManyGetAssociationsMixin, HasManySetAssociationsMixin, InferAttributes, InferCreationAttributes, Model } from "sequelize";
 import { db } from "../Connection";
 
-export interface WeaponItem {
+export interface WeaponItem extends Record<string, unknown> {
   id: number;
   name: string;
   rangeShort?: number;

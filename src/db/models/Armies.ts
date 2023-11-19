@@ -1,7 +1,7 @@
 import { DataTypes, InferAttributes, InferCreationAttributes, Model } from 'sequelize'
 import { db } from "../Connection";
 
-export interface ArmyItem {
+export interface ArmyItem extends Record<string, unknown> {
   id: number;
   name: string;
   active: boolean;
