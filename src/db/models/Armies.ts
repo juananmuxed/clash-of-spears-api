@@ -7,6 +7,7 @@ export interface ArmyItem extends Record<string, unknown> {
   active: boolean;
   imgUrl?: string;
   expansionId?: number;
+  isWarParty?: boolean;
 }
 
 export interface ArmyModel extends Model<InferAttributes<ArmyModel>, InferCreationAttributes<ArmyModel>>, ArmyItem {}
@@ -26,5 +27,8 @@ export const Armies = db.define<ArmyModel>('armies', {
   },
   imgUrl: {
     type: DataTypes.STRING(255)
+  },
+  isWarParty: {
+    type: DataTypes.BOOLEAN
   },
 }, { underscored: true, timestamps: false})
