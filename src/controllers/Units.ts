@@ -76,6 +76,12 @@ export class UnitsController {
     return Units.findByPk(id, { include });
   }
 
+  private async setIncludes(item: UnitItem, unit?: UnitModel) {
+    if(item.armies) await unit?.setArmies(item.armies);
+    if(item.traits) await unit?.setTraits(item.traits);
+    if(item.options) await unit?.setOptions(item.options);
+  }
+
   getUnits = async (_req: Request, res: Response, next: NextFunction) => {
     try {
       const options = await Units.findAll({
@@ -113,9 +119,7 @@ export class UnitsController {
     try {
       const newUnit = await Units.create(body);
 
-      if(body.armies) await newUnit.setArmies(body.armies);
-      if(body.traits) await newUnit.setTraits(body.traits);
-      if(body.options) await newUnit.setOptions(body.options);
+      await this.setIncludes(body, newUnit);
 
       res.status(201).json(await this.getUnitById(newUnit.id))
     } catch (error) {
@@ -139,6 +143,10 @@ export class UnitsController {
 
       const units = await Units.bulkCreate(dataFromCSV);
 
+      units.forEach(async (unit, index) => {
+        await this.setIncludes(dataFromCSV[index], unit);
+      });
+
       res.status(201).json(units);
     } catch (error) {
       next(new InternalError(undefined, error as ValidationError));
@@ -155,9 +163,7 @@ export class UnitsController {
 
       const newUnit = await option?.update(body);
 
-      if(body.armies) await newUnit?.setArmies(body.armies);
-      if(body.traits) await newUnit?.setTraits(body.traits);
-      if(body.options) await newUnit?.setOptions(body.options);
+      await this.setIncludes(body, newUnit);
 
       res.json(await this.getUnitById(newUnit?.id))
     } catch (error) {

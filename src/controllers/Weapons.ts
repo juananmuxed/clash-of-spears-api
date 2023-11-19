@@ -38,6 +38,10 @@ export class WeaponsController {
     });
   }
 
+  private async setIncludes(item: WeaponItem, weapon?: WeaponModel) {
+    if(item.types) await weapon?.setTypes(item.types);
+  }
+
   getWeapons = async (_req: Request, res: Response, next: NextFunction) => {
     try {
       const weapons = await Weapons.findAll({
@@ -84,7 +88,8 @@ export class WeaponsController {
 
     try {
       const newWeapon = await Weapons.create(body);
-      if(body.types) await newWeapon?.setTypes(body.types)
+
+      await this.setIncludes(body, newWeapon);
 
       res.status(201).json(await this.getWeaponById(newWeapon.id))
     } catch (error) {
@@ -108,6 +113,10 @@ export class WeaponsController {
 
       const weapons = await Weapons.bulkCreate(dataFromCSV);
 
+      weapons.forEach(async (weapon, index) => {
+        await this.setIncludes(dataFromCSV[index], weapon);
+      });
+
       res.status(201).json(weapons);
     } catch (error) {
       next(new InternalError(undefined, error as ValidationError));
@@ -123,7 +132,8 @@ export class WeaponsController {
       if(!weapon) next(new NotFoundError(ERRORS.NOT_FOUND('Weapon')))
 
       const newWeapon = await weapon?.update(body);
-      if(body.types) await newWeapon?.setTypes(body.types);
+
+      await this.setIncludes(body, newWeapon);
 
       res.json(await this.getWeaponById(newWeapon?.id))
     } catch (error) {

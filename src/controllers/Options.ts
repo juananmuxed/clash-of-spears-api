@@ -110,6 +110,17 @@ export class OptionsController {
     return Options.findByPk(id, { include });
   }
 
+  private async setIncludes(item: OptionItem, option?: OptionModel) {
+    if(item.armies) await option?.setArmies(item.armies);
+    if(item.incompatibleShields) await option?.setIncompatibleShields(item.incompatibleShields);
+    if(item.neededWeapons) await option?.setNeededWeapons(item.neededWeapons);
+    if(item.incompatibleWeapons) await option?.setIncompatibleWeapons(item.incompatibleWeapons);
+    if(item.upgradeTraits) await option?.setUpgradeTraits(item.upgradeTraits);
+    if(item.neededTraits) await option?.setNeededTraits(item.neededTraits);
+    if(item.removeTraits) await option?.setRemoveTraits(item.removeTraits);
+    if(item.incompatibleTraits) await option?.setIncompatibleTraits(item.incompatibleTraits);
+  }
+
   getOptions = async (_req: Request, res: Response, next: NextFunction) => {
     try {
       const options = await Options.findAll({
@@ -141,6 +152,20 @@ export class OptionsController {
     }
   }
 
+  createOption = async (req: TypedRequest<OptionItem>, res: Response, next: NextFunction) => {
+    const { body } = req;
+
+    try {
+      const newOption = await Options.create(body);
+
+      await this.setIncludes(body, newOption);
+
+      res.status(201).json(await this.getOptionById(newOption.id))
+    } catch (error) {
+      next(new InternalError(undefined, error as ValidationError))
+    }
+  }
+
   bulkCreateOptions = async (req: Request, res: Response, next: NextFunction) => {
     const { file } = req;
 
@@ -157,30 +182,13 @@ export class OptionsController {
 
       const options = await Options.bulkCreate(dataFromCSV);
 
+      options.forEach(async (option, index) => {
+        await this.setIncludes(dataFromCSV[index], option);
+      });
+
       res.status(201).json(options);
     } catch (error) {
       next(new InternalError(undefined, error as ValidationError));
-    }
-  }
-
-  createOption = async (req: TypedRequest<OptionItem>, res: Response, next: NextFunction) => {
-    const { body } = req;
-
-    try {
-      const newOption = await Options.create(body);
-
-      if(body.armies) await newOption.setArmies(body.armies);
-      if(body.incompatibleShields) await newOption.setIncompatibleShields(body.incompatibleShields);
-      if(body.neededWeapons) await newOption.setNeededWeapons(body.neededWeapons);
-      if(body.incompatibleWeapons) await newOption.setIncompatibleWeapons(body.incompatibleWeapons);
-      if(body.upgradeTraits) await newOption.setUpgradeTraits(body.upgradeTraits);
-      if(body.neededTraits) await newOption.setNeededTraits(body.neededTraits);
-      if(body.removeTraits) await newOption.setRemoveTraits(body.removeTraits);
-      if(body.incompatibleTraits) await newOption.setIncompatibleTraits(body.incompatibleTraits);
-
-      res.status(201).json(await this.getOptionById(newOption.id))
-    } catch (error) {
-      next(new InternalError(undefined, error as ValidationError))
     }
   }
 
@@ -194,14 +202,7 @@ export class OptionsController {
 
       const newOption = await option?.update(body);
 
-      if(body.armies) await newOption?.setArmies(body.armies);
-      if(body.incompatibleShields) await newOption?.setIncompatibleShields(body.incompatibleShields);
-      if(body.neededWeapons) await newOption?.setNeededWeapons(body.neededWeapons);
-      if(body.incompatibleWeapons) await newOption?.setIncompatibleWeapons(body.incompatibleWeapons);
-      if(body.upgradeTraits) await newOption?.setUpgradeTraits(body.upgradeTraits);
-      if(body.neededTraits) await newOption?.setNeededTraits(body.neededTraits);
-      if(body.removeTraits) await newOption?.setRemoveTraits(body.removeTraits);
-      if(body.incompatibleTraits) await newOption?.setIncompatibleTraits(body.incompatibleTraits);
+      await this.setIncludes(body, newOption);
 
       res.json(await this.getOptionById(newOption?.id))
     } catch (error) {
