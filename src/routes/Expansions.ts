@@ -14,10 +14,10 @@ router.route('/')
   .put([auth.authJWT, auth.checkRole(['editor', 'admin'])], expansions.updateExpansion)
   .delete([auth.authJWT, auth.checkRole(['editor', 'admin'])], expansions.deleteExpansion);
 
-router.get('/:id', [auth.authJWT, auth.checkRole(['editor', 'admin'])], expansions.getExpansion);
-
 router.get('/admin', [auth.authJWT, auth.checkRole(['editor', 'admin'])], expansions.getExpansionsPaginated);
 
 router.post('/bulk', [auth.authJWT, auth.checkRole(['editor', 'admin']), uploader.single('file')], expansions.bulkCreateExpansions);
+
+router.get('/:id', [auth.authJWT, auth.checkRole(['editor', 'admin'])], expansions.getExpansion);
 
 export default router;
