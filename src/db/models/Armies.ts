@@ -19,7 +19,7 @@ export const Armies = db.define<ArmyModel>('armies', {
     unique: true,
   },
   name: {
-    type: DataTypes.STRING(20),
+    type: DataTypes.STRING(40),
     unique: true,
   },
   active: {
