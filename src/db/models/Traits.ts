@@ -20,7 +20,7 @@ export const Traits = db.define<TraitModel>('traits', {
     unique: true,
   },
   name: {
-    type: DataTypes.STRING(20),
+    type: DataTypes.STRING(40),
     unique: true,
   },
   requires: {
