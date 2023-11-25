@@ -4,6 +4,7 @@ import armiesRoutes from './Armies'
 import weaponsRoutes from './Weapons'
 import armorsRoutes from './Armors'
 import traitsRoutes from './Traits'
+import traitsValuesRoutes from './TraitsValues'
 import optionsRoutes from './Options'
 import unitsRoutes from './Units'
 import usersRoutes from './Users'
@@ -19,6 +20,7 @@ const Paths = [
   "armors",
   "options",
   "traits",
+  "traitsValues",
   "units",
   "users",
   "roles",
@@ -35,6 +37,7 @@ export const apiPaths: Record<ApiPaths, string> = {
   weapons: rootPath + 'weapons',
   armors: rootPath + 'armors',
   traits: rootPath + 'traits',
+  traitsValues: rootPath + 'traits-values',
   options: rootPath + 'options',
   units: rootPath + 'units',
   users: rootPath + 'users',
@@ -48,6 +51,7 @@ export const setRoutes = (app: Application) => {
   app.use(apiPaths.weapons, weaponsRoutes);
   app.use(apiPaths.armors, armorsRoutes);
   app.use(apiPaths.traits, traitsRoutes);
+  app.use(apiPaths.traitsValues, traitsValuesRoutes);
   app.use(apiPaths.options, optionsRoutes);
   app.use(apiPaths.units, unitsRoutes);
   app.use(apiPaths.users, usersRoutes);

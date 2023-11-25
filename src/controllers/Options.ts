@@ -100,7 +100,7 @@ const include = [
     through: {
       attributes: []
     }
-  }
+  },
 ]
 
 export { include as includeOptions }

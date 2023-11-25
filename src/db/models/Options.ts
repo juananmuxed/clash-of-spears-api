@@ -1,4 +1,4 @@
-import { DataTypes, HasManyAddAssociationsMixin, HasManyGetAssociationsMixin, HasManySetAssociationsMixin, InferAttributes, InferCreationAttributes, Model } from "sequelize";
+import { DataTypes, HasManySetAssociationsMixin, InferAttributes, InferCreationAttributes, Model } from "sequelize";
 import { db } from "../Connection";
 import { Armies, ArmyModel } from "./Armies";
 import { ArmorModel, Armors } from "./Armors";
@@ -23,29 +23,13 @@ export interface OptionItem extends Record<string, unknown> {
   upgradeBody?: number;
   upgradeShield?: number;
   upgradeBarding?: number;
-  addArmies: HasManyAddAssociationsMixin<ArmyModel, number>;
-  getArmies: HasManyGetAssociationsMixin<ArmyModel>;
   setArmies: HasManySetAssociationsMixin<ArmyModel, number>;
-  addIncompatibleShields: HasManyAddAssociationsMixin<ArmorModel, number>;
-  getIncompatibleShields: HasManyGetAssociationsMixin<ArmorModel>;
   setIncompatibleShields: HasManySetAssociationsMixin<ArmorModel, number>;
-  addNeededWeapons: HasManyAddAssociationsMixin<WeaponModel, number>;
-  getNeededWeapons: HasManyGetAssociationsMixin<WeaponModel>;
   setNeededWeapons: HasManySetAssociationsMixin<WeaponModel, number>;
-  addIncompatibleWeapons: HasManyAddAssociationsMixin<WeaponModel, number>;
-  getIncompatibleWeapons: HasManyGetAssociationsMixin<WeaponModel>;
   setIncompatibleWeapons: HasManySetAssociationsMixin<WeaponModel, number>;
-  addUpgradeTraits: HasManyAddAssociationsMixin<TraitModel, number>;
-  getUpgradeTraits: HasManyGetAssociationsMixin<TraitModel>;
   setUpgradeTraits: HasManySetAssociationsMixin<TraitModel, number>;
-  addNeededTraits: HasManyAddAssociationsMixin<TraitModel, number>;
-  getNeededTraits: HasManyGetAssociationsMixin<TraitModel>;
   setNeededTraits: HasManySetAssociationsMixin<TraitModel, number>;
-  addRemoveTraits: HasManyAddAssociationsMixin<TraitModel, number>;
-  getRemoveTraits: HasManyGetAssociationsMixin<TraitModel>;
   setRemoveTraits: HasManySetAssociationsMixin<TraitModel, number>;
-  addIncompatibleTraits: HasManyAddAssociationsMixin<TraitModel, number>;
-  getIncompatibleTraits: HasManyGetAssociationsMixin<TraitModel>;
   setIncompatibleTraits: HasManySetAssociationsMixin<TraitModel, number>;
 }
 
@@ -90,7 +74,7 @@ export const OptionsArmies = db.define('options_armies', {
 Options.belongsToMany(Armies, { through: OptionsArmies, as: 'armies' });
 Armies.belongsToMany(Options, { through: OptionsArmies, as: 'options' });
 
-export const OptionsArmors = db.define('options_armors', {
+export const OptionsArmors = db.define('options_armors_inc', {
   optionId: {
     type: DataTypes.INTEGER,
     references: {
@@ -110,7 +94,7 @@ export const OptionsArmors = db.define('options_armors', {
 Options.belongsToMany(Armors, { through: OptionsArmors, as: 'incompatibleShields' });
 Armors.belongsToMany(Options, { through: OptionsArmors, as: 'incompatibleOptions' });
 
-export const OptionsWeapons = db.define('options_weapons', {
+export const OptionsWeapons = db.define('options_weapons_nee', {
   optionId: {
     type: DataTypes.INTEGER,
     references: {
@@ -125,7 +109,20 @@ export const OptionsWeapons = db.define('options_weapons', {
       key: 'id'
     }
   },
-  incompatibleWeaponId: {
+}, { underscored: true, timestamps: false });
+
+Options.belongsToMany(Weapons, { through: OptionsWeapons, as: 'neededWeapons', otherKey: 'weaponId' });
+Weapons.belongsToMany(Options, { through: OptionsWeapons, as: 'neededOptions' });
+
+export const OptionsWeaponsIncompatible = db.define('options_weapons_inc', {
+  optionId: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: Options,
+      key: 'id'
+    }
+  },
+  weaponId: {
     type: DataTypes.INTEGER,
     references: {
       model: Weapons,
@@ -134,13 +131,10 @@ export const OptionsWeapons = db.define('options_weapons', {
   }
 }, { underscored: true, timestamps: false });
 
-Options.belongsToMany(Weapons, { through: OptionsWeapons, as: 'neededWeapons', otherKey: 'weaponId' });
-Weapons.belongsToMany(Options, { through: OptionsWeapons, as: 'neededOptions' });
+Options.belongsToMany(Weapons, { through: OptionsWeaponsIncompatible, as: 'incompatibleWeapons', otherKey: 'weaponId' });
+Weapons.belongsToMany(Options, { through: OptionsWeaponsIncompatible, as: 'incompatibleOptions' });
 
-Options.belongsToMany(Weapons, { through: OptionsWeapons, as: 'incompatibleWeapons', otherKey: 'incompatibleWeaponId' });
-Weapons.belongsToMany(Options, { through: OptionsWeapons, as: 'incompatibleOptions' });
-
-export const OptionsTraits = db.define('options_traits', {
+export const OptionsTraits = db.define('options_traits_upg', {
   optionId: {
     type: DataTypes.INTEGER,
     references: {
@@ -155,40 +149,70 @@ export const OptionsTraits = db.define('options_traits', {
       key: 'id'
     }
   },
-  neededTraitId: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: Traits,
-      key: 'id'
-    }
-  },
-  removeTraitId: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: Traits,
-      key: 'id'
-    }
-  },
-  incompatibleTraitId: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: Traits,
-      key: 'id'
-    }
-  }
 }, { underscored: true, timestamps: false });
 
 Options.belongsToMany(Traits, { through: OptionsTraits, as: 'upgradeTraits', otherKey: 'traitId'});
 Traits.belongsToMany(Options, { through: OptionsTraits, as: 'traitsUpgrade' });
 
-Options.belongsToMany(Traits, { through: OptionsTraits, as: 'neededTraits', otherKey: 'neededTraitId'});
-Traits.belongsToMany(Options, { through: OptionsTraits, as: 'traitsNeeded' });
+export const OptionsTraitsNeeded = db.define('options_traits_nee', {
+  optionId: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: Options,
+      key: 'id'
+    }
+  },
+  traitId: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: Traits,
+      key: 'id'
+    }
+  },
+}, { underscored: true, timestamps: false });
 
-Options.belongsToMany(Traits, { through: OptionsTraits, as: 'removeTraits', otherKey: 'removeTraitId'});
-Traits.belongsToMany(Options, { through: OptionsTraits, as: 'traitsRemoved' });
+Options.belongsToMany(Traits, { through: OptionsTraitsNeeded, as: 'neededTraits', otherKey: 'traitId'});
+Traits.belongsToMany(Options, { through: OptionsTraitsNeeded, as: 'traitsNeeded' });
 
-Options.belongsToMany(Traits, { through: OptionsTraits, as: 'incompatibleTraits', otherKey: 'incompatibleTraitId'});
-Traits.belongsToMany(Options, { through: OptionsTraits, as: 'traitsIncompatible' });
+export const OptionsTraitsRemove = db.define('options_traits_rem', {
+  optionId: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: Options,
+      key: 'id'
+    }
+  },
+  traitId: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: Traits,
+      key: 'id'
+    }
+  },
+}, { underscored: true, timestamps: false });
+
+Options.belongsToMany(Traits, { through: OptionsTraitsRemove, as: 'removeTraits', otherKey: 'traitId'});
+Traits.belongsToMany(Options, { through: OptionsTraitsRemove, as: 'traitsRemoved' });
+
+export const OptionsTraitsIncompatible = db.define('options_traits_inc', {
+  optionId: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: Options,
+      key: 'id'
+    }
+  },
+  traitId: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: Traits,
+      key: 'id'
+    }
+  },
+}, { underscored: true, timestamps: false });
+
+Options.belongsToMany(Traits, { through: OptionsTraitsIncompatible, as: 'incompatibleTraits', otherKey: 'traitId'});
+Traits.belongsToMany(Options, { through: OptionsTraitsIncompatible, as: 'traitsIncompatible' });
 
 Options.belongsTo(Armors, { foreignKey: 'upgradeBody', as: 'body' });
 Options.belongsTo(Armors, { foreignKey: 'upgradeShield', as: 'shield' });

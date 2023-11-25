@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { TraitItem, TraitModel, Traits } from "../db/models/Traits";
+import { TraitItem, TraitModel, Traits, TraitsValues } from "../db/models/Traits";
 import { InternalError, NotFileError, NotFoundError } from "../models/Errors";
 import { ERRORS } from "../config/data/Errors";
 import { TypedRequest } from "../db/models/common/ExpressTypes";
@@ -18,6 +18,10 @@ const include = [
     where: {
       active: true
     }
+  },
+  {
+    model: TraitsValues,
+    as: 'value',
   },
 ];
 
