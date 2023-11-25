@@ -9,6 +9,7 @@ import { getPagination, getOrder, pagedResponse } from './utils/Pagination';
 import { Pagination } from "../models/Pagination";
 import { MIME_TYPES } from "../config/data/MimeTypes";
 import { convertCsv } from "./utils/ConvertCsv";
+import { includeTraitValue } from "./TraitsValues";
 
 const include = [
   {
@@ -22,6 +23,7 @@ const include = [
   {
     model: TraitsValues,
     as: 'value',
+    include: includeTraitValue,
   },
 ];
 

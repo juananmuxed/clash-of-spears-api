@@ -23,6 +23,8 @@ const include = [
   },
 ];
 
+export { include as includeTraitValue };
+
 export class TraitsValuesController {
 
   private getTraitValueById(id?: number) {
