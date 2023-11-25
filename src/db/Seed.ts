@@ -109,6 +109,18 @@ export const seedDatabase = async () => {
     }
   });
 
+  await Expansions.findOrCreate({
+    where: {
+      id: 7
+    },
+    defaults: {
+      id: 7,
+      name:'fieldBlood',
+      active: true,
+      book: 'Fields of Blood'
+    }
+  });
+
   await UnitTypes.findOrCreate({
     where: {
       id: 1
