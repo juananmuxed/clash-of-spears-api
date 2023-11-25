@@ -1,4 +1,4 @@
-import { isArray, isJson, isObject } from "./Is";
+import { isJson } from "./Is";
 
 export const convertCsv = <T extends Record<string, unknown>>(csvFile: Express.Multer.File, separator = ';', enterChar = '\r\n') => {
   const convert =(
