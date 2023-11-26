@@ -1,5 +1,5 @@
 /* eslint-disable no-use-before-define */
-import { DataTypes, HasManyAddAssociationsMixin, HasManyGetAssociationsMixin, HasManySetAssociationsMixin, InferAttributes, InferCreationAttributes, Model } from "sequelize";
+import { DataTypes, HasManySetAssociationsMixin, InferAttributes, InferCreationAttributes, Model } from "sequelize";
 import { db } from "../Connection";
 
 export interface WeaponItem extends Record<string, unknown> {
@@ -11,8 +11,6 @@ export interface WeaponItem extends Record<string, unknown> {
   initiative?: number;
   bookPage?: number;
   types?: number[];
-  addTypes: HasManyAddAssociationsMixin<WeaponTypeModel, number>;
-  getTypes: HasManyGetAssociationsMixin<WeaponTypeModel>;
   setTypes: HasManySetAssociationsMixin<WeaponTypeModel, number>;
 }
 

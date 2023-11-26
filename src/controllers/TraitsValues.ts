@@ -1,10 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import { TraitItem, TraitModel, TraitValueItem, TraitValueModel, Traits, TraitsValues } from "../db/models/Traits";
+import { TraitValueItem, TraitValueModel, TraitsValues } from "../db/models/Traits";
 import { InternalError, NotFileError, NotFoundError } from "../models/Errors";
 import { ERRORS } from "../config/data/Errors";
 import { TypedRequest } from "../db/models/common/ExpressTypes";
 import { ValidationError } from "sequelize";
-import { Expansions } from "../db/models/Expansions";
 import { getPagination, getOrder, pagedResponse } from './utils/Pagination';
 import { Pagination } from "../models/Pagination";
 import { MIME_TYPES } from "../config/data/MimeTypes";

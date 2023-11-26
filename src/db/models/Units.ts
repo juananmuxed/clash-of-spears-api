@@ -1,4 +1,4 @@
-import { DataTypes, HasManyAddAssociationsMixin, HasManyGetAssociationsMixin, HasManySetAssociationsMixin, InferAttributes, InferCreationAttributes, Model } from "sequelize";
+import { DataTypes, HasManySetAssociationsMixin, InferAttributes, InferCreationAttributes, Model } from "sequelize";
 import { db } from "../Connection";
 import { TraitModel, Traits } from "./Traits";
 import { Armies, ArmyModel } from "./Armies";
@@ -38,14 +38,8 @@ export interface UnitItem extends Record<string, unknown> {
   armies?: number[];
   traits?: number[];
   options?: number[];
-  addArmies: HasManyAddAssociationsMixin<ArmyModel, number>;
-  getArmies: HasManyGetAssociationsMixin<ArmyModel>;
   setArmies: HasManySetAssociationsMixin<ArmyModel, number>;
-  addTraits: HasManyAddAssociationsMixin<TraitModel, number>;
-  getTraits: HasManyGetAssociationsMixin<TraitModel>;
   setTraits: HasManySetAssociationsMixin<TraitModel, number>;
-  addOptions: HasManyAddAssociationsMixin<OptionModel, number>;
-  getOptions: HasManyGetAssociationsMixin<OptionModel>;
   setOptions: HasManySetAssociationsMixin<OptionModel, number>;
 }
 

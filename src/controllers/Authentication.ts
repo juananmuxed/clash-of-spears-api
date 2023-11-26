@@ -2,8 +2,8 @@
 import { NextFunction, Request, Response } from "express";
 import { ERRORS } from '../config/data/Errors';
 import { AuthError, InternalError, InvalidLogin, NotFoundError } from '../models/Errors';
-import { Authentication, TokenItem } from '../models/Authentication';
-import { UserItem, UserModel, Users } from "../db/models/Users";
+import { Authentication } from '../models/Authentication';
+import { UserItem, Users } from "../db/models/Users";
 import { Roles } from "../db/models/Roles";
 import { ValidationError } from "sequelize";
 import { TypedRequest } from "../db/models/common/ExpressTypes";
