@@ -1,6 +1,6 @@
 {
   "name": "clash-of-spears-api",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "API REST for Clash of Spears game",
   "main": "index.js",
   "scripts": {
