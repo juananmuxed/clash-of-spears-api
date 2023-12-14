@@ -143,6 +143,7 @@ export class OptionsController {
       const pagedOptions = await Options.findAndCountAll({
         include,
         ...pagination,
+        distinct: true,
         order
       });
 

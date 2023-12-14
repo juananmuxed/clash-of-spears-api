@@ -39,6 +39,7 @@ export class ArmiesController {
       const pagedArmies = await Armies.findAndCountAll({
         include,
         ...pagination,
+        distinct: true,
         order
       });
 

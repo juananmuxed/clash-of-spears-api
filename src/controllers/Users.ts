@@ -37,6 +37,7 @@ export class UsersController {
       const pagedUsers = await Users.findAndCountAll({
         include,
         ...pagination,
+        distinct: true,
         order
       });
 

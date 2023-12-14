@@ -54,6 +54,7 @@ export class TraitsValuesController {
       const pagedTraitsValues = await TraitsValues.findAndCountAll({
         include,
         ...pagination,
+        distinct: true,
         order
       });
 

@@ -64,6 +64,7 @@ export class ExpansionsController {
       const pagedExpansions = await Expansions.findAndCountAll({
         include,
         ...pagination,
+        distinct: true,
         order
       });
 

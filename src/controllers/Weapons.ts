@@ -74,6 +74,7 @@ export class WeaponsController {
       const pagedWeapons = await Weapons.findAndCountAll({
         include,
         ...pagination,
+        distinct: true,
         order
       });
 

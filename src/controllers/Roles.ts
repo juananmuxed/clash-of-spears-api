@@ -28,6 +28,7 @@ export class RolesController {
 
       const pagedRoles = await Roles.findAndCountAll({
         ...pagination,
+        distinct: true,
         order
       });
 

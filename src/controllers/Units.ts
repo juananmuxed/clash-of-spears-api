@@ -104,6 +104,7 @@ export class UnitsController {
       const pagedUnits = await Units.findAndCountAll({
         include,
         ...pagination,
+        distinct: true,
         order
       });
 

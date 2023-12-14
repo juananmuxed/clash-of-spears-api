@@ -51,6 +51,7 @@ export class ArmorsController {
       const pagedArmors = await Armors.findAndCountAll({
         include,
         ...pagination,
+        distinct: true,
         order
       });
 

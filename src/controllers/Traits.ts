@@ -57,6 +57,7 @@ export class TraitsController {
       const pagedTraits = await Traits.findAndCountAll({
         include,
         ...pagination,
+        distinct: true,
         order
       });
 
